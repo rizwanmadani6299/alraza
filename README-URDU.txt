@@ -1,4 +1,4 @@
-AL RAZA TRAVEL - UPDATE KARNE KA TAREEQA
+ALRAZA  - UPDATE KARNE KA TAREEQA
 
 Ek dafa ka setup (sirf pehli baar):
 1. nodejs.org se Node.js (LTS) install karein.
