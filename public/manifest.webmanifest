@@ -1,0 +1,15 @@
+{
+ "name": "Al Raza Travel",
+ "short_name": "Al Raza",
+ "start_url": "/",
+ "display": "standalone",
+ "background_color": "#0e3b2c",
+ "theme_color": "#0e3b2c",
+ "icons": [
+  {
+   "src": "icon-512.png",
+   "sizes": "1024x1024",
+   "type": "image/png"
+  }
+ ]
+}
