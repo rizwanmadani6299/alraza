@@ -1,19 +1,15 @@
-ALRAZA  - UPDATE KARNE KA TAREEQA
+AL RAZA TRAVEL - FINAL
 
-Ek dafa ka setup (sirf pehli baar):
-1. nodejs.org se Node.js (LTS) install karein.
-2. Is folder mein Command Prompt kholein aur chalayein:  npx wrangler login
-   (browser khulega, Cloudflare account se Allow kar dein)
+GITHUB SE LIVE KARNA (repository: alraza)
+1. Zip extract karein.
+2. GitHub par alraza repository kholein: Add file, phir Upload files.
+3. Extract kiye hue folder ki saari cheezein (public folder, wrangler.jsonc, deploy.bat, README-URDU.txt) drag karke chhod dein. Purani files ka naam wahi hai, wo khud badal jayengi.
+4. Commit changes dabayen.
+5. Cloudflare mein alraza worker, phir Deployments: naya build Success hona chahiye. 1-2 minute baad site par Ctrl+F5.
 
-Har update ke liye:
-1. public\index.html ko Notepad ya VS Code mein kholein.
-2. Script ke shuru mein "SITE SETTINGS" wala hissa dhoondein.
-   WhatsApp number, offer ki akhri tareekh, Makkah hotel ki dates, packages ke rates
-   (PROGRAMS) aur hotel list (MH) wahin se badalte hain.
-3. File save karein, phir deploy.bat par double click karein.
-   Taqreeban 10 second mein website live ho jati hai. Zip banane ki zaroorat nahi.
+COMPUTER SE SEEDHA LIVE KARNA (GitHub ke baghair)
+1. Node.js (nodejs.org, LTS) install karein, folder mein cmd khol kar: npx wrangler login
+2. deploy.bat par double click.
 
-Note: Worker ka naam wrangler.jsonc mein "alraza-travel" hai. Yehi naam rakhein,
-tab purani site hi update hogi, nayi nahi banegi.
-Jab apna domain lagayen to index.html mein purana workers.dev link (og:url,
-canonical, og:image) naye domain se badal dein.
+AAINDA BADLAV
+public\index.html mein script ke shuru mein SITE SETTINGS hain: WhatsApp number, offer ki akhri tareekh (PROMO_END), Makkah hotels ki date, rates (PROGRAMS), hotel list (MH).
