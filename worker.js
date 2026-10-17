@@ -85,10 +85,28 @@ async function sheet(env) {
   return new Response(await r.text(), { headers: { "content-type": "text/csv; charset=utf-8", "cache-control": "public, max-age=120" } });
 }
 
+// Packages published from the Al Raza app (Firebase Firestore document site/packages, field "csv").
+const FB_PROJECT = "al-raza-travel";
+const FB_KEY = "AIzaSyB_hs2QYewT5nteFmaV42XIz0pZRMVOw8o"; // public web key (not a secret); security is in Firestore rules
+async function appPackages() {
+  const url = "https://firestore.googleapis.com/v1/projects/" + FB_PROJECT + "/databases/(default)/documents/site/packages?key=" + FB_KEY;
+  const r = await fetch(url, { cf: { cacheTtl: 30, cacheEverything: true } });
+  if (!r.ok) return "";
+  const d = await r.json();
+  const f = d && d.fields && d.fields.csv;
+  return f && typeof f.stringValue === "string" ? f.stringValue : "";
+}
+
 export default {
   async fetch(req, env) {
     const u = new URL(req.url);
     if (u.pathname === "/api/sheet") {
+      try {
+        const csv = await appPackages();
+        if (csv && csv.length > 40) {
+          return new Response(csv, { headers: { "content-type": "text/csv; charset=utf-8", "cache-control": "public, max-age=30" } });
+        }
+      } catch (e) { /* fall through to the Google Sheet / built-in packages */ }
       try { return await sheet(env); } catch (e) { return new Response("", { status: 502 }); }
     }
     if (u.pathname === "/api/chat") {
