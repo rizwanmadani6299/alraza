@@ -1,0 +1,6 @@
+Partners ke logo is folder mein rakhein.
+File ke naam bilkul yehi hon (png, webp ya jpg chalta hai):
+  al-hamzas.png
+  amere-taiba.png
+  islamic-ziyarat.png
+Logo na ho to site khud naam ke pehle harf dikha deti hai.

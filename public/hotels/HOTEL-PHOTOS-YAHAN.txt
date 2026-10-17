@@ -1,0 +1,29 @@
+Hotel ki tasveer is folder mein rakhein (jpg, kam az kam 600 pixel chaurai, 150 KB se chhoti).
+File ka naam bilkul neeche likha hona chahiye. Photo na ho to site us hotel ko bina photo ke dikhati hai.
+
+Qila Ajyad  ->  qila-ajyad.jpg
+Jadat Al Khalil  ->  jadat-al-khalil.jpg
+Dyar Matar  ->  dyar-matar.jpg
+Jada Khalil  ->  jada-khalil.jpg
+Diyar Mather  ->  diyar-mather.jpg
+Taj Fiddi  ->  taj-fiddi.jpg
+Lolo Touheed  ->  lolo-touheed.jpg
+That Hotel  ->  that-hotel.jpg
+Multaqa Akhyar  ->  multaqa-akhyar.jpg
+Afwaj Al Momayaza  ->  afwaj-al-momayaza.jpg
+Multiqa Ibadat  ->  multiqa-ibadat.jpg
+Tara Jawrat  ->  tara-jawrat.jpg
+Hotel One  ->  hotel-one.jpg
+Land Premium  ->  land-premium.jpg
+Shaza Al Wasam-2  ->  shaza-al-wasam-2.jpg
+Land Premium / White Lion  ->  land-premium-white-lion.jpg
+Fundiq Haris  ->  fundiq-haris.jpg
+Makaram Hijra  ->  makaram-hijra.jpg
+Voco  ->  voco.jpg
+Rukan Al Zawiya  ->  rukan-al-zawiya.jpg
+Mira Shaeb  ->  mira-shaeb.jpg
+Mella 1  ->  mella-1.jpg
+Mella 2  ->  mella-2.jpg
+Zad Al Bait  ->  zad-al-bait.jpg
+Najma Khaleej  ->  najma-khaleej.jpg
+Jafria  ->  jafria.jpg
