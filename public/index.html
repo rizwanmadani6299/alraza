@@ -608,6 +608,24 @@ PROGRAMS.push(isb("Airblue","2026-10-27","2026-11-16",0,"PA 272","PA 271","20 kg
 PROGRAMS.push(isb("Airblue","2026-11-06","2026-11-26",0,"PA 270","PA 271","20 kg",ISB_HA,[[271574,277654,289814,313374],[278414,286774,300454,329334],[276894,285254,298174,324774],[284494,284494,294374,309574],[284494,292854,308814,340734],[301214,314134,334654,377974],[317934,335414,367334,429654],[313374,324014,351374,406854],[0,366574,409134,491974],[0,416734,473734,586974]]));
 PROGRAMS.push(isb("Airblue","2026-12-19","2027-01-08",0,"PA 272","PA 273","20 kg",ISB_HB,[[285706,295586,311546,344226],[293306,303946,321426,357906],[294826,304706,321426,355626],[298626,309266,329026,370826],[298626,308506,329786,370826],[321426,338906,369306,427826],[317626,328266,356386,411106],[372346,384506,428586,516746],[0,357906,404266,507626],[0,466586,538786,682426]]));
 PROGRAMS.push(isb("Saudia","2027-01-06","2027-01-26",0,"SV 729","SV 726","23 kg",ISB_HB,[[281086,290966,306926,339606],[288686,299326,316806,353286],[290206,300086,316806,351006],[294006,304646,324406,366206],[294006,303886,325166,366206],[316806,334286,364686,423206],[313006,323646,351766,406486],[367726,379886,423966,512126],[0,353286,399646,503006],[0,461966,534166,677806]]));
+/* ===== MULTAN PACKAGES ===== */
+function mlt(air,d1,d2,bg,rooms,H,R,nt){function D(d){var t=new Date(d+"T00:00:00");return t.getDate()+" "+t.toLocaleString("en",{month:"short"}).toUpperCase()+" "+t.getFullYear()}
+return{city:"Multan",title:"UMRAH PACKAGE",air:air,route:"MUX → JED → MUX",days:20,dep:D(d1).replace(/ \d{4}$/,""),depy:String(new Date(d1).getFullYear()),d1:d1,d2:d2,
+f1:{no:"",dt:D(d1),r:"MUX-JED",t:"",bg:bg},f2:{no:"",dt:D(d2),r:"JED-MUX",t:"",bg:bg},rooms:rooms,combos:H,rates:R,
+inc:1,gifts:[nt,"Return ticket","Umrah visa","Hotels","Transport","Ziyarat","24/7 support"]}}
+var MX_RM=["Quad","Triple","Double","Single"],MX_RS=["Sharing","Quad","Triple","Double"],N137="13 nights Makkah + 7 nights Madinah",N1010="10 nights Makkah + 10 nights Madinah";
+var MX_HA=[["Mayar Mayser","",1,"Rabwa Safwa 7","",1],["Qila Ajyad","1100 m",0,"Kinan Madina","900 m",0],["Taj Fiddi","700-800 m",0,"Wahat Al Shark","700 m",0],["Mira Shaeb","400 m",0,"Mahad Madina 2","475 m",0],["Afwaj Al Momayaza","650 m",0,"Rua Luxury","50 m",0]],MX_HAx=[["Mayar Mayser","",1,"Rabwa Safwa 7","",1],["Qila Ajyad","1100 m",0,"Kinan Madina","900 m",0],["Taj Fiddi","700-800 m",0,"Wahat Al Shark","700 m",0],["Mira Shaeb","400 m",0,"Mahad Madina 2","450-500 m",0],["Afwaj Al Momayaza","650 m",0,"Rua Luxury","50 m",0]],MX_HB=[["Hotel Number One 3","",1,"Retaj Al Madina","",1],["Qila Ajyad","1100 m",0,"Kinan Madina","900 m",0],["Taj Fiddi","700-800 m",0,"Wahat Al Shark","700 m",0],["Mira Shaeb","400 m",0,"Mahad Madina 2","475 m",0],["Afwaj Al Momayaza","650 m",0,"Rua Luxury","50 m",0]],MX_HP=[["Qasr Al Sharq","",1,"Hala Taibah","",1],["Dyar Matar","1200 m",0,"Retaj Al Madina","",0],["Qila Ajyad","1100 m",0,"Kinan Madina","900 m",0],["Taj Fiddi","700 m",0,"Wahat Al Shark","700 m",0],["Jafria","550 m",0,"Abdullah Fouzan","600 m",0],["Mira Shaeb","400 m",0,"Mahad Madina 2","475 m",0],["Swaed Al Khaima","600 m",0,"Diyar Al Aws","750 m",0],["Blora Moazan","350 m",0,"Ansar Plus","500 m",0],["Lolo Al Falah","50 m",0,"Rou Taiba","50 m",0],["Abraj Taibah","300 m",0,"Rou Taiba","50 m",0]];
+PROGRAMS.push(mlt("Airblue","2026-10-19","2026-11-08","20 kg",MX_RM,MX_HAx,[[240272,245440,254712,271280],[256460,263148,275232,300084],[265656,272534,289848,325468],[279032,286328,308216,351536],[282528,299020,325316,376920]],N137));
+PROGRAMS.push(mlt("Airblue","2026-11-12","2026-12-02","20 kg",MX_RM,MX_HA,[[249342,255042,264846,283010],[264238,271382,283618,309078],[274118,281262,299654,334918],[289470,297754,320630,366914],[291978,308470,335754,389334]],N137));
+PROGRAMS.push(mlt("TBC","2026-11-19","2026-12-09","As per airline",MX_RS,MX_HP,[[283580,287834,297192,315029],[294980,304272,319522,349964],[295740,304198,317743,345631],[307140,316416,334936,373667],[314740,327330,348354,389522],[319300,328528,351166,398997],[331460,348994,379091,441770],[335260,341932,367814,420383],[0,428740,486749,603623],[0,404420,452870,553004]],N1010));
+PROGRAMS.push(mlt("TBC","2026-11-24","2026-12-14","As per airline",MX_RS,MX_HP,[[283580,287834,297192,315029],[294980,304272,319522,349964],[295740,304198,317743,345631],[307140,316416,334936,373667],[314740,327330,348354,389522],[319300,328528,351166,398997],[331460,348994,379091,441770],[335260,341932,367814,420383],[0,428740,486749,603623],[0,404420,452870,553004]],N1010));
+PROGRAMS.push(mlt("TBC","2026-11-29","2026-12-19","As per airline",MX_RS,MX_HP,[[263516,266151,271922,282990],[271496,277279,286754,305704],[272028,277278,285711,303066],[280008,285804,297368,321589],[285328,293232,306385,332179],[288520,294319,308514,338549],[297032,308082,327062,366567],[299692,303918,320221,353427],[0,365128,402590,478062],[0,348104,381234,445891]],N1010));
+PROGRAMS.push(mlt("Airblue","2026-11-30","2026-12-20","20 kg",MX_RM,MX_HB,[[257930,265606,277994,303682],[266898,274574,287874,315462],[280350,288026,307482,347458],[292130,300946,325418,373830],[327850,353310,395870,479014]],N137));
+PROGRAMS.push(mlt("Saudia","2027-01-01","2027-01-21","23 kg",MX_RM,MX_HB,[[264497,272705,287069,314809],[276505,285701,301509,333657],[288361,296037,317469,360409],[300217,309033,336013,388453],[339813,367249,412773,502833]],N137));
+/* ===== LAHORE PACKAGE (flynas, 1 stop each way, 30 kg) ===== */
+function lhr(air,d1,d2,bg,rooms,H,R,nt,st){var o=mlt(air,d1,d2,bg,rooms,H,R,nt);o.city="Lahore";o.route="LHE → JED → LHE";o.f1.r="LHE-JED";o.f2.r="JED-LHE";o.f1.no=st;o.f2.no=st;return o}
+var LH_H=[["Mayar Mayser","",1,"Rabwa Safwa 7","",1],["Qila Ajyad","1000 m",0,"Kinan Madina","900 m",0],["Taj Fiddi","700-800 m",0,"Wahat Al Shark","700 m",0],["Mira Shaeb","400 m",0,"Mahad Madina 2","450-500 m",0],["Afwaj Al Momayaza","650 m",0,"Rua Luxury","50 m",0]];
+PROGRAMS.push(lhr("flynas","2026-11-09","2026-11-29","30 kg",MX_RM,LH_H,[[237444,243144,252948,271112],[252340,259484,271720,297180],[262220,268851,286738,322526],[277572,285856,308732,355016],[280080,296572,323856,377436]],N137,"1 STOP"));
 var SEATS={"2026-10-26":8,"2026-10-27":10}; // seats left per departure date (badge shows when 20 or fewer)
 PROGRAMS.forEach(function(P){if(SEATS[P.d1])P.seats=SEATS[P.d1]});
 if(window.__SHEET){try{var SP=sheetPrograms(window.__SHEET);if(SP.length)PROGRAMS=SP}catch(e){}} // packages from Google Sheet (if connected)
@@ -632,7 +650,7 @@ function dh(t,s,u){var n=kmn(t);return(n||(t&&!s)?'<span><b>'+esc(t)+'</b>'+(n?'
 function dt(t,s){return t?t+(s?", shuttle":""):(s?"shuttle":"")}
 function fcard(k,f){return'<div class="fc"><small><span>'+k+'</span><span class="no">'+esc(f.no)+'</span></small><b class="tm">'+esc(f.t?f.t.replace("–","→"):f.dt)+'</b><span>'+(f.t?esc(f.dt)+' · ':'')+esc(f.r)+' · Baggage: '+esc(f.bg)+'</span></div>'}
 PROGRAMS.forEach(function(P){
-var st={room:P.rooms[1]||P.rooms[0],sort:"price",walk:false,sel:-1};PROGRAMS_ST.push(function(){st.sel=-1});var rp=P.route.split(" → "),
+var st={room:P.rooms.indexOf("Quad")>-1?"Quad":(P.rooms[1]||P.rooms[0]),sort:"price",walk:false,sel:-1};PROGRAMS_ST.push(function(){st.sel=-1});var rp=P.route.split(" → "),
 mx=Math.max.apply(null,P.combos.map(function(c){return Math.max(kmn(c[1]),kmn(c[4]))})),
 base="Assalamu Alaikum, I want to book the Umrah package: "+P.city+", "+P.air+", "+P.f1.dt+" to "+P.f2.dt+" ("+P.days+" days).",
 left=Math.ceil((new Date(P.d1+"T00:00:00")-new Date())/864e5);
@@ -1000,6 +1018,11 @@ document.getElementById("rpk").addEventListener("change",function(){document.get
 document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]');if(!a||a.getAttribute("href").length<2)return;var t=document.getElementById(a.getAttribute("href").slice(1)),d=t&&t.querySelector("details.fold");if(d)d.open=true});
 /* sections that duplicated other parts: removed */
 ["hotels","dates"].forEach(function(id){var e=document.getElementById(id);if(e)e.remove()});
+
+/* ===== packages whose departure date arrives while the page is open: refresh so they disappear ===== */
+function stale(){var n=new Date();return PROGRAMS.some(function(p){return new Date(p.d1+"T00:00:00")<=n})}
+setInterval(function(){if(stale())location.reload()},300000);
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&stale())location.reload()});
 }
 </script>
 <script>
