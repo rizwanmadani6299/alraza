@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://alraza.travelcom.workers.dev/sitemap.xml
