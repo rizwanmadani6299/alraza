@@ -7,3 +7,12 @@
 
 /favicon.svg
   Cache-Control: public, max-age=2592000
+
+/media/*
+  Cache-Control: public, max-age=2592000
+
+/hotels/*
+  Cache-Control: public, max-age=604800
+
+/*.webmanifest
+  Cache-Control: public, max-age=86400
