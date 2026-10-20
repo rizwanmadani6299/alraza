@@ -10,9 +10,9 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
-- CEO: Rizwan Madani. Call/WhatsApp: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alraza.travelcom.workers.dev/
+- CEO: Rizwan Madani. Call/WhatsApp: 0318 6299894 or 0300 6299894 (either number works). Email: alrazatravelofficial@gmail.com. Website: https://alraza.travelcom.workers.dev/
 - Address: A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
-- Travel partners: Amere Taiba International (Muhammad Raees), Al-Hamza's Travel & Tours (Muneer Raza), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
+- Travel partners: Amere Taiba International (Muhammad Raees), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
 - Booking: reserve your seat first, then complete documents and advance payment to confirm. Payment methods: JazzCash, Easypaisa, online banking, cheque, pay order. Every payment is confirmed on WhatsApp with the team, who share account details there.
 - Cancellation: Al Raza charges no cancellation fee of its own, but the hotel and airline cancellation policies in force apply and must be followed. The team gives the exact terms for a specific booking.
