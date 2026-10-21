@@ -124,7 +124,7 @@ async function getPackages() {
 }
 
 // API Endpoint: /api/packages?city=Karachi
-if (url.pathname === '/api/packages') {
+if (u.pathname === '/api/packages') {
   const packages = await getPackages();
   const city = url.searchParams.get('city');
   let filtered = packages;
