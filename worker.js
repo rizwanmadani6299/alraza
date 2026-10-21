@@ -112,9 +112,6 @@ export default {
     if (u.pathname === "/api/chat") {
       try { return await chat(req, env); } catch (e) { return json({ error: "server" }, 500); }
     }
-    return env.ASSETS.fetch(req);
-  }
-};
 // Packages API - Free Dynamic
 async function getPackages() {
   try {
@@ -138,3 +135,6 @@ if (url.pathname === '/api/packages') {
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
   });
 }
+    return env.ASSETS.fetch(req);
+  }
+};
