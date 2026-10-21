@@ -1,0 +1,20 @@
+[
+  {
+    "city": "Karachi",
+    "package": "Budget Umrah 21 Days",
+    "price": "280,000",
+    "hotel_distance": "Makkah 600m - Madina 300m"
+  },
+  {
+    "city": "Lahore",
+    "package": "Budget Umrah 21 Days",
+    "price": "285,000",
+    "hotel_distance": "Makkah 600m - Madina 300m"
+  },
+  {
+    "city": "Multan",
+    "package": "5 Star Umrah 15 Days",
+    "price": "450,000",
+    "hotel_distance": "Makkah 100m - Madina 50m"
+  }
+]
