@@ -10,7 +10,7 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
-- CEO: Rizwan Madani. Call/WhatsApp: 0318 6299894 or 0300 6299894 (either number works). Email: alrazatravelofficial@gmail.com. Website: https://alraza.travelcom.workers.dev/
+- CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alraza.travelcom.workers.dev/
 - Address: A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
 - Travel partners: Amere Taiba International (Muhammad Raees), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
@@ -85,11 +85,117 @@ async function sheet(env) {
   return new Response(await r.text(), { headers: { "content-type": "text/csv; charset=utf-8", "cache-control": "public, max-age=120" } });
 }
 
+// ---------- Packages + WhatsApp Business bot ----------
+// Data comes from /packages.json (same file the website data is exported to).
+const CITIES = { "1": "Karachi", karachi: "Karachi", "2": "Lahore", lahore: "Lahore", "3": "Islamabad", islamabad: "Islamabad", "4": "Multan", multan: "Multan" };
+const LETTER = { K: "Karachi", L: "Lahore", I: "Islamabad", M: "Multan" };
+const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
+const MENU = "🕋 *AL RAZA TRAVEL — Main Menu*\n\n1️⃣ Karachi\n2️⃣ Lahore\n3️⃣ Islamabad\n4️⃣ Multan\n\n*1 se 4 likhein*\n(Team se baat: *team*)";
+const TEAM = "📞 *Al Raza Travel*\nWhatsApp: 0300 6299894\nCall: 0318 6299894\n\nMain menu: *menu*";
+
+async function loadPackages(req, env) {
+  try {
+    const r = await env.ASSETS.fetch(new Request(new URL("/packages.json", req.url)));
+    const a = await r.json();
+    return Array.isArray(a) ? a : [];
+  } catch (e) { return []; }
+}
+function upcoming(list) {
+  const today = new Date().toISOString().slice(0, 10);
+  return list.filter(p => p.departure_date >= today).sort((a, b) => (a.departure_date < b.departure_date ? -1 : 1));
+}
+function dstr(iso) { const [y, m, d] = iso.split("-"); return Number(d) + " " + MON[Number(m) - 1] + " " + y; }
+function rs(n) { return "Rs. " + Number(n).toLocaleString("en-US"); }
+function dist(h, which) { const d = h[which + "_distance"]; const sh = h[which + "_shuttle"]; return (d ? " (" + d + ")" : "") + (sh ? " 🚌" : ""); }
+
+function cityReply(city, pk) {
+  const list = upcoming(pk).filter(p => p.city === city);
+  if (!list.length) return "📍 *" + city + "*\n\nAbhi " + city + " ke packages update ho rahe hain. Team se baat karne ke liye *team* likhein.\n\nMain menu: *menu*";
+  const L = city[0];
+  let t = "📍 *" + city + " — Umrah Departures*\n\n";
+  list.slice(0, 9).forEach((p, i) => {
+    const prices = p.hotels.flatMap(h => Object.values(h.rates));
+    t += "*" + L + (i + 1) + "* — " + dstr(p.departure_date) + " · " + p.airline + " · " + p.days + " din\n";
+    if (prices.length) t += "   Rs. " + Math.min(...prices).toLocaleString("en-US") + " se shuru\n";
+  });
+  t += "\nTafseel ke liye code likhein, jaise *" + L + "1*\nMain menu: *menu*";
+  return t;
+}
+function departureReply(letter, n, pk) {
+  const city = LETTER[letter];
+  const p = upcoming(pk).filter(x => x.city === city)[n - 1];
+  if (!p) return "Ye code nahi mila. *" + (Object.keys(CITIES).find(k => CITIES[k] === city && isNaN(k)) || "menu") + "* likh kar dobara dekhein, ya *menu* likhein.";
+  let t = "✈️ *" + city + " — " + dstr(p.departure_date) + "*\n" + p.airline + " · " + p.route + " · " + p.days + " din\n\nRoom type chunein:\n";
+  p.rooms.forEach(r => { t += "• *" + letter + n + " " + r.toLowerCase() + "*\n"; });
+  if (p.includes && p.includes.length) t += "\n✅ " + p.includes.slice(0, 6).join(" · ") + "\n";
+  t += "\nMain menu: *menu*";
+  return t;
+}
+function ratesReply(letter, n, room, pk) {
+  const city = LETTER[letter];
+  const p = upcoming(pk).filter(x => x.city === city)[n - 1];
+  if (!p) return "Ye code nahi mila. *menu* likhein.";
+  const rn = p.rooms.find(r => r.toLowerCase() === room);
+  if (!rn) return "Is departure mein ye room type nahi hai. Options: " + p.rooms.join(", ") + ".\n\nMain menu: *menu*";
+  const rows = p.hotels.filter(h => h.rates[rn]).sort((a, b) => a.rates[rn] - b.rates[rn]);
+  if (!rows.length) return "Is room type ka rate abhi available nahi. *team* likhein.\n\nMain menu: *menu*";
+  let t = "💰 *" + city + " " + dstr(p.departure_date) + " — " + rn + "* (per person)\n";
+  rows.slice(0, 10).forEach((h, i) => {
+    t += "\n" + (i + 1) + ". *" + rs(h.rates[rn]) + "*\n   Makkah: " + h.makkah + dist(h, "makkah") + "\n   Madinah: " + h.madinah + dist(h, "madinah") + "\n";
+  });
+  t += "\n🚌 = shuttle service\nBooking ke liye *team* likhein.\nMain menu: *menu*";
+  return t;
+}
+function botReply(raw, pk) {
+  const m = String(raw || "").toLowerCase().replace(/[\u200e\u200f]/g, "").replace(/[\uFE0F\u20E3]/g, "").trim();
+  if (!m || m === "0" || m === "00" || /^(hi|hello|hey|menu|start)\b/.test(m) || /salam|assalam|aoa/.test(m)) return MENU;
+  if (/^(team|agent|call|contact|help|booking|book)\b/.test(m)) return TEAM;
+  if (CITIES[m]) return cityReply(CITIES[m], pk);
+  const c = m.match(/^([klim])\s?(\d{1,2})(?:\s+(sharing|quad|triple|double|single))?$/);
+  if (c) {
+    const L = c[1].toUpperCase();
+    return c[3] ? ratesReply(L, Number(c[2]), c[3], pk) : departureReply(L, Number(c[2]), pk);
+  }
+  return "Maaf kijiye, samajh nahi aya. 🙏\n\n" + MENU;
+}
+async function bot(req, env) {
+  let message = "", phone = "guest";
+  const url = new URL(req.url);
+  message = url.searchParams.get("message") || url.searchParams.get("query") || "";
+  phone = url.searchParams.get("phone") || url.searchParams.get("sender") || phone;
+  if (req.method === "POST") {
+    const ct = req.headers.get("content-type") || "";
+    let body = {};
+    if (ct.includes("json")) body = await req.json().catch(() => ({}));
+    else if (ct.includes("form")) { const f = await req.formData().catch(() => null); if (f) body = Object.fromEntries(f.entries()); }
+    message = body.message || body.query || body.text || message;
+    phone = body.phone || body.sender || body.from || phone;
+  }
+  const pk = await loadPackages(req, env);
+  const replyText = botReply(message, pk);
+  return new Response(JSON.stringify({ reply: replyText, replies: [{ message: replyText }] }), { headers: { "Content-Type": "application/json", ...CORS } });
+}
+async function packagesApi(req, env) {
+  const url = new URL(req.url);
+  let list = upcoming(await loadPackages(req, env));
+  const city = url.searchParams.get("city");
+  if (city) list = list.filter(p => p.city.toLowerCase() === city.toLowerCase());
+  return new Response(JSON.stringify(list), { headers: { "Content-Type": "application/json", ...CORS } });
+}
+
 export default {
   async fetch(req, env) {
     const u = new URL(req.url);
     if (u.pathname === "/api/sheet") {
       try { return await sheet(env); } catch (e) { return new Response("", { status: 502 }); }
+    }
+    if (req.method === "OPTIONS" && (u.pathname === "/api/bot" || u.pathname === "/api/whatsapp" || u.pathname === "/api/packages")) return new Response(null, { status: 204, headers: CORS });
+    if (u.pathname === "/api/bot" || u.pathname === "/api/whatsapp") {
+      try { return await bot(req, env); } catch (e) { return json({ reply: "Maaf kijiye, thori der baad koshish karein." }, 200); }
+    }
+    if (u.pathname === "/api/packages") {
+      try { return await packagesApi(req, env); } catch (e) { return json([], 200); }
     }
     if (u.pathname === "/api/chat") {
       try { return await chat(req, env); } catch (e) { return json({ error: "server" }, 500); }

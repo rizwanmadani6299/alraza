@@ -16,3 +16,6 @@
 
 /*.webmanifest
   Cache-Control: public, max-age=86400
+
+/packages.json
+  Cache-Control: public, max-age=300
