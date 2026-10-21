@@ -115,3 +115,26 @@ export default {
     return env.ASSETS.fetch(req);
   }
 };
+// Packages API - Free Dynamic
+async function getPackages() {
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/rizwanmadani6299/alraza/main/packages.json');
+    const packages = await res.json();
+    return packages;
+  } catch (e) {
+    return [];
+  }
+}
+
+// API Endpoint: /api/packages?city=Karachi
+if (url.pathname === '/api/packages') {
+  const packages = await getPackages();
+  const city = url.searchParams.get('city');
+  let filtered = packages;
+  if (city) {
+    filtered = packages.filter(p => p.city.toLowerCase() === city.toLowerCase());
+  }
+  return new Response(JSON.stringify(filtered), {
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+  });
+}
