@@ -191,6 +191,9 @@ export default {
       try { return await sheet(env); } catch (e) { return new Response("", { status: 502 }); }
     }
     if (req.method === "OPTIONS" && (u.pathname === "/api/bot" || u.pathname === "/api/whatsapp" || u.pathname === "/api/packages")) return new Response(null, { status: 204, headers: CORS });
+    if (u.pathname === "/" && (req.method === "POST" || u.searchParams.has("message") || u.searchParams.has("query"))) {
+      try { return await bot(req, env); } catch (e) { return json({ reply: "Maaf kijiye, thori der baad koshish karein." }, 200); }
+    }
     if (u.pathname === "/api/bot" || u.pathname === "/api/whatsapp") {
       try { return await bot(req, env); } catch (e) { return json({ reply: "Maaf kijiye, thori der baad koshish karein." }, 200); }
     }
