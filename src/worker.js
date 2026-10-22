@@ -91,7 +91,7 @@ const CITIES = { "1": "Karachi", karachi: "Karachi", "2": "Lahore", lahore: "Lah
 const LETTER = { K: "Karachi", L: "Lahore", I: "Islamabad", M: "Multan" };
 const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
-const MENU = "🕋 *AL RAZA TRAVEL — Main Menu*\n\n1️⃣ Karachi\n2️⃣ Lahore\n3️⃣ Islamabad\n4️⃣ Multan\n\n*1 se 4 likhein*\n(Team se baat: *team*)";
+const MENU = "🕋 *AL RAZA TRAVEL — Main Menu*\n\n1️⃣ Karachi\n2️⃣ Lahore\n3️⃣ Islamabad\n4️⃣ Multan\n\n*1 se 4 likhein*\n(Sab packages: *packages* · Team se baat: *team*)\n\nYa apna sawal seedha likh dein, hum jawab denge. 🙂";
 const TEAM = "📞 *Al Raza Travel*\nWhatsApp: 0300 6299894\nCall: 0318 6299894\n\nMain menu: *menu*";
 
 async function loadPackages(req, env) {
@@ -147,21 +147,90 @@ function ratesReply(letter, n, room, pk) {
   t += "\n🚌 = shuttle service\nBooking ke liye *team* likhein.\nMain menu: *menu*";
   return t;
 }
-function botReply(raw, pk) {
+function allReply(pk) {
+  const up = upcoming(pk);
+  if (!up.length) return "Abhi koi package listed nahi. Team se baat karne ke liye *team* likhein.";
+  let t = "🕋 *Al Raza Travel — Tamam Umrah Packages*\n";
+  ["Karachi", "Lahore", "Islamabad", "Multan"].forEach(city => {
+    const list = up.filter(p => p.city === city);
+    if (!list.length) return;
+    t += "\n📍 *" + city + "*\n";
+    list.forEach((p, i) => {
+      const prices = p.hotels.flatMap(h => Object.values(h.rates));
+      t += "*" + city[0] + (i + 1) + "* " + dstr(p.departure_date) + " · " + p.airline + (prices.length ? " · Rs. " + Math.min(...prices).toLocaleString("en-US") + " se" : "") + "\n";
+    });
+  });
+  t += "\nTafseel ke liye code likhein, jaise *K1*\nRate ke liye *K1 quad*\nMain menu: *menu*";
+  return t;
+}
+function compactCtx(pk) {
+  return upcoming(pk).map((p, i) => {
+    const code = p.city[0] + (upcoming(pk).filter(x => x.city === p.city).indexOf(p) + 1);
+    let t = "[" + code + "] " + p.city + " departure " + dstr(p.departure_date) + ", return " + dstr(p.return_date) + ", " + p.airline + ", " + p.route + ", " + p.days + " days. Rooms: " + p.rooms.join("/") + ". Includes: " + (p.includes || []).join(", ") + ".\n";
+    p.hotels.forEach(h => {
+      t += " - Makkah " + h.makkah + (h.makkah_distance ? " " + h.makkah_distance : "") + (h.makkah_shuttle ? " shuttle" : "") + " | Madinah " + h.madinah + (h.madinah_distance ? " " + h.madinah_distance : "") + (h.madinah_shuttle ? " shuttle" : "") + " | " + Object.entries(h.rates).map(([k, v]) => k + " " + v).join(", ") + "\n";
+    });
+    return t;
+  }).join("\n").slice(0, 30000);
+}
+const WA_ADD = `\n\nYOU ARE NOW REPLYING INSIDE A WHATSAPP CHAT (the customer is already chatting with Al Raza Travel on WhatsApp Business, so never tell them to message on WhatsApp).
+FORMAT: plain text for WhatsApp. Use *bold* with single asterisks. No markdown headers, no tables, no code blocks. Keep replies under about 1500 characters.
+SCOPE: you may answer ANY question about Al Raza Travel, Umrah/Hajj, visas, tickets, groups, hotels and payments. For packages use ONLY the LIVE PACKAGES below. All rates are per person in Pakistani rupees. If asked for all packages, list every departure (code, date, airline, starting price). If asked about a city, hotel, date or room type, list the matching rows with rates. If something is not in the data, say the team will confirm and give the call number 0318 6299894.
+Always end by telling the customer they can type *menu* for the main menu or *team* to talk to the team.`;
+async function ai(env, text, pk, phone) {
+  if (!env.ANTHROPIC_API_KEY || limited("wa:" + phone)) return null;
+  const system = SYSTEM + WA_ADD + "\n\nLIVE PACKAGES (from the website right now)\n" + (compactCtx(pk) || "No packages are listed at the moment.");
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+    body: JSON.stringify({ model: MODEL, max_tokens: 900, system, messages: [{ role: "user", content: String(text).slice(0, 600) }] })
+  });
+  if (!r.ok) return null;
+  const d = await r.json();
+  const out = (d.content || []).filter(b => b.type === "text").map(b => b.text).join("").replace(/\s*\[WA\]\s*/g, " ").trim();
+  return out || null;
+}
+function keywordReply(m, pk) {
+  const UR = { "کراچی": "Karachi", "لاہور": "Lahore", "اسلام آباد": "Islamabad", "ملتان": "Multan" };
+  const uc = Object.keys(UR).find(k => m.includes(k));
+  if (uc) return cityReply(UR[uc], pk);
+  if (/پیکیج|پیکج|ریٹ|قیمت|کتنے|کتنا|عمرہ/.test(m)) return allReply(pk);
+  const city = Object.keys(CITIES).find(k => isNaN(k) && m.includes(k));
+  if (city) return cityReply(CITIES[city], pk);
+  if (/package|packages|rate|price|sab|all|umrah|umra|kitna|kitne/.test(m)) return allReply(pk);
+  if (/visa/.test(m)) return "🛂 *Visa*\nUmrah aur dusre mulkon ke visa ki processing hum karte hain. Documents: passport (6+ mahine valid), photos, CNIC copy.\n\n" + TEAM;
+  if (/ticket|flight/.test(m)) return "✈️ *Air Tickets*\nDomestic aur international tickets available hain. Route aur date bata dein, team rate bata degi.\n\n" + TEAM;
+  if (/group/.test(m)) return "👥 *Group Travel*\nFamilies aur groups ke liye behtar rates. Group size aur mahina bata dein.\n\n" + TEAM;
+  if (/payment|pay|account|jazz|easypaisa|bank/.test(m)) return "💳 *Payment*\nJazzCash, Easypaisa, online banking, cheque, pay order. Account details team WhatsApp par share karti hai.\n\n" + TEAM;
+  if (/address|office|location|kahan/.test(m)) return "📍 A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi.\n\n" + TEAM;
+  return null;
+}
+async function botReply(raw, pk, env, phone) {
   const m = String(raw || "").toLowerCase().replace(/[\u200e\u200f]/g, "").replace(/[\uFE0F\u20E3]/g, "").trim();
-  if (!m || m === "0" || m === "00" || /^(hi|hello|hey|menu|start)\b/.test(m) || /salam|assalam|aoa/.test(m)) return MENU;
+  if (!m || m === "0" || m === "00" || /^(hi|hello|hey|menu|start)\b/.test(m) || /^(salam|assalam|aslam|slam|aoa)[\w\s-]{0,20}$/.test(m)) return MENU;
   if (/^(team|agent|call|contact|help|booking|book)\b/.test(m)) return TEAM;
+  if (/^(packages?|all|sab|sab packages|all packages)$/.test(m)) return allReply(pk);
   if (CITIES[m]) return cityReply(CITIES[m], pk);
   const c = m.match(/^([klim])\s?(\d{1,2})(?:\s+(sharing|quad|triple|double|single))?$/);
   if (c) {
     const L = c[1].toUpperCase();
     return c[3] ? ratesReply(L, Number(c[2]), c[3], pk) : departureReply(L, Number(c[2]), pk);
   }
-  return "Maaf kijiye, samajh nahi aya. 🙏\n\n" + MENU;
+  try { const a = await ai(env, raw, pk, phone); if (a) return a; } catch (e) {}
+  return keywordReply(m, pk) || ("Maaf kijiye, mujhe is sawal ka jawab nahi mila. 🙏 Team se baat karein: *team*\n\n" + MENU);
+}
+function pkgIntent(raw) {
+  const m = String(raw || "").toLowerCase().replace(/[\uFE0F\u20E3]/g, "").trim();
+  if (!m) return false;
+  if (/^[klim]\s?\d{1,2}(\s+(sharing|quad|triple|double|single))?$/.test(m)) return true;
+  if (/package|packages|pkg|rate|rates|price|prices|umrah|umra|umrah|hajj|kitna|kitne|kitni|qeemat|hotel|quad|triple|double|sharing|departure|flight|seat|karachi|lahore|islamabad|multan|makkah|madinah|madina|mecca|ziyarat|ziarat/.test(m)) return true;
+  if (/پیکیج|پیکج|ریٹ|قیمت|کتنے|کتنا|عمرہ|حج|ہوٹل|کراچی|لاہور|اسلام آباد|ملتان|مکہ|مدینہ|زیارت/.test(raw)) return true;
+  return false;
 }
 async function bot(req, env) {
-  let message = "", phone = "guest";
+  let message = "", phone = "guest", mode = "";
   const url = new URL(req.url);
+  mode = url.searchParams.get("mode") || "";
   message = url.searchParams.get("message") || url.searchParams.get("query") || "";
   phone = url.searchParams.get("phone") || url.searchParams.get("sender") || phone;
   if (req.method === "POST") {
@@ -171,9 +240,13 @@ async function bot(req, env) {
     else if (ct.includes("form")) { const f = await req.formData().catch(() => null); if (f) body = Object.fromEntries(f.entries()); }
     message = body.message || body.query || body.text || message;
     phone = body.phone || body.sender || body.from || phone;
+    mode = body.mode || mode;
+  }
+  if (mode === "packages" && !pkgIntent(message)) {
+    return new Response(JSON.stringify({ reply: "", replies: [] }), { headers: { "Content-Type": "application/json", ...CORS } });
   }
   const pk = await loadPackages(req, env);
-  const replyText = botReply(message, pk);
+  const replyText = await botReply(message, pk, env, String(phone));
   return new Response(JSON.stringify({ reply: replyText, replies: [{ message: replyText }] }), { headers: { "Content-Type": "application/json", ...CORS } });
 }
 async function packagesApi(req, env) {
