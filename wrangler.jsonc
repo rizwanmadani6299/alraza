@@ -2,7 +2,7 @@
   "name": "alraza",
   "main": "src/worker.js",
   "compatibility_date": "2026-10-01",
-  "vars": { "SHEET_CSV_URL": "" },
+  "vars": { "SHEET_CSV_URL": "https://docs.google.com/spreadsheets/d/14O7XqJb4uTe4edKwBQ9JMq5wTQbYE8MT7m-BMmpJHWI/export?format=csv&gid=0" },
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

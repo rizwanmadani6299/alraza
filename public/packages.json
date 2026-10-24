@@ -942,6 +942,244 @@
   "per": "person"
  },
  {
+  "id": "karachi-2026-11-14",
+  "city": "Karachi",
+  "airline": "TBC",
+  "route": "KHI → JED → KHI",
+  "days": 20,
+  "departure_date": "2026-11-14",
+  "return_date": "2026-12-03",
+  "rooms": [
+   "Sharing",
+   "Quad",
+   "Triple",
+   "Double"
+  ],
+  "hotels": [
+   {
+    "makkah": "Ajwa Ziyafa",
+    "makkah_distance": "",
+    "makkah_shuttle": true,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 227300,
+     "Quad": 232943,
+     "Triple": 242349,
+     "Double": 261161
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 233944,
+     "Quad": 241248,
+     "Triple": 253423,
+     "Double": 277771
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 235605,
+     "Quad": 243324,
+     "Triple": 256191,
+     "Double": 281924
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 236964,
+     "Quad": 245023,
+     "Triple": 258456,
+     "Double": 285321
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 238625,
+     "Quad": 247099,
+     "Triple": 261224,
+     "Double": 289474
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 240588,
+     "Quad": 249553,
+     "Triple": 264496,
+     "Double": 294381
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 241418,
+     "Quad": 250591,
+     "Triple": 265880,
+     "Double": 296458
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 244438,
+     "Quad": 254366,
+     "Triple": 270913,
+     "Double": 304008
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Karam Al Dhahabi Hotel",
+    "madinah_distance": "550 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 248440,
+     "Quad": 259368,
+     "Triple": 277583,
+     "Double": 314011
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 256896,
+     "Quad": 269938,
+     "Triple": 291676,
+     "Double": 335151
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 261048,
+     "Quad": 275129,
+     "Triple": 298597,
+     "Double": 345533
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 274336,
+     "Quad": 291739,
+     "Triple": 320743,
+     "Double": 378753
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 288228,
+     "Quad": 309104,
+     "Triple": 343897,
+     "Double": 413483
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 292192,
+     "Quad": 300044,
+     "Triple": 331817,
+     "Double": 395363
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 306084,
+     "Quad": 317409,
+     "Triple": 354970,
+     "Double": 430093
+    }
+   }
+  ],
+  "includes": [
+   "20 days / 19 nights",
+   "Return ticket",
+   "Umrah visa",
+   "Hotels",
+   "Transport",
+   "Ziyarat",
+   "24/7 support"
+  ],
+  "currency": "PKR",
+  "per": "person"
+ },
+ {
   "id": "multan-2026-11-19",
   "city": "Multan",
   "airline": "TBC",
@@ -1108,6 +1346,482 @@
   "per": "person"
  },
  {
+  "id": "karachi-2026-11-21",
+  "city": "Karachi",
+  "airline": "TBC",
+  "route": "KHI → JED → KHI",
+  "days": 20,
+  "departure_date": "2026-11-21",
+  "return_date": "2026-12-10",
+  "rooms": [
+   "Sharing",
+   "Quad",
+   "Triple",
+   "Double"
+  ],
+  "hotels": [
+   {
+    "makkah": "Ajwa Ziyafa",
+    "makkah_distance": "",
+    "makkah_shuttle": true,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 231300,
+     "Quad": 236943,
+     "Triple": 246349,
+     "Double": 265161
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 237944,
+     "Quad": 245248,
+     "Triple": 257423,
+     "Double": 281771
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 239605,
+     "Quad": 247324,
+     "Triple": 260191,
+     "Double": 285924
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 240964,
+     "Quad": 249023,
+     "Triple": 262456,
+     "Double": 289321
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 242625,
+     "Quad": 251099,
+     "Triple": 265224,
+     "Double": 293474
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 244588,
+     "Quad": 253553,
+     "Triple": 268496,
+     "Double": 298381
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 245418,
+     "Quad": 254591,
+     "Triple": 269880,
+     "Double": 300458
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 248438,
+     "Quad": 258366,
+     "Triple": 274913,
+     "Double": 308008
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Karam Al Dhahabi Hotel",
+    "madinah_distance": "550 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 252440,
+     "Quad": 263368,
+     "Triple": 281583,
+     "Double": 318011
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 260896,
+     "Quad": 273938,
+     "Triple": 295676,
+     "Double": 339151
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 265048,
+     "Quad": 279129,
+     "Triple": 302597,
+     "Double": 349533
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 278336,
+     "Quad": 295739,
+     "Triple": 324743,
+     "Double": 382753
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 292228,
+     "Quad": 313104,
+     "Triple": 347897,
+     "Double": 417483
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 296192,
+     "Quad": 304044,
+     "Triple": 335817,
+     "Double": 399363
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 310084,
+     "Quad": 321409,
+     "Triple": 358970,
+     "Double": 434093
+    }
+   }
+  ],
+  "includes": [
+   "20 days / 19 nights",
+   "Return ticket",
+   "Umrah visa",
+   "Hotels",
+   "Transport",
+   "Ziyarat",
+   "24/7 support"
+  ],
+  "currency": "PKR",
+  "per": "person"
+ },
+ {
+  "id": "karachi-2026-11-23",
+  "city": "Karachi",
+  "airline": "TBC",
+  "route": "KHI → JED → KHI",
+  "days": 21,
+  "departure_date": "2026-11-23",
+  "return_date": "2026-12-13",
+  "rooms": [
+   "Sharing",
+   "Quad",
+   "Triple",
+   "Double"
+  ],
+  "hotels": [
+   {
+    "makkah": "Ajwa Ziyafa",
+    "makkah_distance": "",
+    "makkah_shuttle": true,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 231979,
+     "Quad": 237793,
+     "Triple": 247482,
+     "Double": 266860
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 239227,
+     "Quad": 246853,
+     "Triple": 259562,
+     "Double": 284980
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 241039,
+     "Quad": 249118,
+     "Triple": 262582,
+     "Double": 289510
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 242247,
+     "Quad": 250628,
+     "Triple": 264595,
+     "Double": 292530
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 244059,
+     "Quad": 252893,
+     "Triple": 267615,
+     "Double": 297060
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 246475,
+     "Quad": 255913,
+     "Triple": 271642,
+     "Double": 303100
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 247381,
+     "Quad": 257045,
+     "Triple": 273152,
+     "Double": 305365
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 250401,
+     "Quad": 260820,
+     "Triple": 278185,
+     "Double": 312915
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Karam Al Dhahabi Hotel",
+    "madinah_distance": "550 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 254327,
+     "Quad": 265728,
+     "Triple": 284728,
+     "Double": 322730
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 262783,
+     "Quad": 276298,
+     "Triple": 298822,
+     "Double": 343870
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 268521,
+     "Quad": 283470,
+     "Triple": 308385,
+     "Double": 358215
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 281809,
+     "Quad": 300080,
+     "Triple": 330532,
+     "Double": 391435
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 295701,
+     "Quad": 317445,
+     "Triple": 353685,
+     "Double": 426165
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 301288,
+     "Quad": 309140,
+     "Triple": 342612,
+     "Double": 409555
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 315180,
+     "Quad": 326505,
+     "Triple": 365765,
+     "Double": 444285
+    }
+   }
+  ],
+  "includes": [
+   "21 days / 20 nights",
+   "Return ticket",
+   "Umrah visa",
+   "Hotels",
+   "Transport",
+   "Ziyarat",
+   "24/7 support"
+  ],
+  "currency": "PKR",
+  "per": "person"
+ },
+ {
   "id": "multan-2026-11-24",
   "city": "Multan",
   "airline": "TBC",
@@ -1263,6 +1977,482 @@
   ],
   "includes": [
    "10 nights Makkah + 10 nights Madinah",
+   "Return ticket",
+   "Umrah visa",
+   "Hotels",
+   "Transport",
+   "Ziyarat",
+   "24/7 support"
+  ],
+  "currency": "PKR",
+  "per": "person"
+ },
+ {
+  "id": "karachi-2026-11-25",
+  "city": "Karachi",
+  "airline": "TBC",
+  "route": "KHI → JED → KHI",
+  "days": 21,
+  "departure_date": "2026-11-25",
+  "return_date": "2026-12-15",
+  "rooms": [
+   "Sharing",
+   "Quad",
+   "Triple",
+   "Double"
+  ],
+  "hotels": [
+   {
+    "makkah": "Ajwa Ziyafa",
+    "makkah_distance": "",
+    "makkah_shuttle": true,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 231979,
+     "Quad": 237793,
+     "Triple": 247482,
+     "Double": 266860
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 239227,
+     "Quad": 246853,
+     "Triple": 259562,
+     "Double": 284980
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 241039,
+     "Quad": 249118,
+     "Triple": 262582,
+     "Double": 289510
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 242247,
+     "Quad": 250628,
+     "Triple": 264595,
+     "Double": 292530
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 244059,
+     "Quad": 252893,
+     "Triple": 267615,
+     "Double": 297060
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 246475,
+     "Quad": 255913,
+     "Triple": 271642,
+     "Double": 303100
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 247381,
+     "Quad": 257045,
+     "Triple": 273152,
+     "Double": 305365
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 250401,
+     "Quad": 260820,
+     "Triple": 278185,
+     "Double": 312915
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Karam Al Dhahabi Hotel",
+    "madinah_distance": "550 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 254327,
+     "Quad": 265728,
+     "Triple": 284728,
+     "Double": 322730
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 262783,
+     "Quad": 276298,
+     "Triple": 298822,
+     "Double": 343870
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 268521,
+     "Quad": 283470,
+     "Triple": 308385,
+     "Double": 358215
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 281809,
+     "Quad": 300080,
+     "Triple": 330532,
+     "Double": 391435
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 295701,
+     "Quad": 317445,
+     "Triple": 353685,
+     "Double": 426165
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 301288,
+     "Quad": 309140,
+     "Triple": 342612,
+     "Double": 409555
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 315180,
+     "Quad": 326505,
+     "Triple": 365765,
+     "Double": 444285
+    }
+   }
+  ],
+  "includes": [
+   "21 days / 20 nights",
+   "Return ticket",
+   "Umrah visa",
+   "Hotels",
+   "Transport",
+   "Ziyarat",
+   "24/7 support"
+  ],
+  "currency": "PKR",
+  "per": "person"
+ },
+ {
+  "id": "karachi-2026-11-28",
+  "city": "Karachi",
+  "airline": "TBC",
+  "route": "KHI → JED → KHI",
+  "days": 20,
+  "departure_date": "2026-11-28",
+  "return_date": "2026-12-17",
+  "rooms": [
+   "Sharing",
+   "Quad",
+   "Triple",
+   "Double"
+  ],
+  "hotels": [
+   {
+    "makkah": "Ajwa Ziyafa",
+    "makkah_distance": "",
+    "makkah_shuttle": true,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 231300,
+     "Quad": 236943,
+     "Triple": 246349,
+     "Double": 265161
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 237944,
+     "Quad": 245248,
+     "Triple": 257423,
+     "Double": 281771
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 239605,
+     "Quad": 247324,
+     "Triple": 260191,
+     "Double": 285924
+    }
+   },
+   {
+    "makkah": "Qila Ajyad",
+    "makkah_distance": "1000 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 240964,
+     "Quad": 249023,
+     "Triple": 262456,
+     "Double": 289321
+    }
+   },
+   {
+    "makkah": "Jada Al Mashaer Old Jada Khalil",
+    "makkah_distance": "1200 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 242625,
+     "Quad": 251099,
+     "Triple": 265224,
+     "Double": 293474
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 244588,
+     "Quad": 253553,
+     "Triple": 268496,
+     "Double": 298381
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Kinan / Dar Ajyal / Similar",
+    "madinah_distance": "750-900 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 245418,
+     "Quad": 254591,
+     "Triple": 269880,
+     "Double": 300458
+    }
+   },
+   {
+    "makkah": "Multaqa Al Ibadat & Tara Jawarat",
+    "makkah_distance": "750 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 248438,
+     "Quad": 258366,
+     "Triple": 274913,
+     "Double": 308008
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Karam Al Dhahabi Hotel",
+    "madinah_distance": "550 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 252440,
+     "Quad": 263368,
+     "Triple": 281583,
+     "Double": 318011
+    }
+   },
+   {
+    "makkah": "Lolo Touheed",
+    "makkah_distance": "900 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 260896,
+     "Quad": 273938,
+     "Triple": 295676,
+     "Double": 339151
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Abdullah Fouzan (Dyar Hijaz)",
+    "madinah_distance": "600 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 265048,
+     "Quad": 279129,
+     "Triple": 302597,
+     "Double": 349533
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 278336,
+     "Quad": 295739,
+     "Triple": 324743,
+     "Double": 382753
+    }
+   },
+   {
+    "makkah": "Jawarat Bait (Arafat Zehbi)",
+    "makkah_distance": "600 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 292228,
+     "Quad": 313104,
+     "Triple": 347897,
+     "Double": 417483
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Widyar Al Medina / Rou Khair",
+    "madinah_distance": "350 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 296192,
+     "Quad": 304044,
+     "Triple": 335817,
+     "Double": 399363
+    }
+   },
+   {
+    "makkah": "Bullorah Aldurrah",
+    "makkah_distance": "350-400 m",
+    "makkah_shuttle": false,
+    "madinah": "Rou Taiba Hotel Medina",
+    "madinah_distance": "100 m",
+    "madinah_shuttle": false,
+    "rates": {
+     "Sharing": 310084,
+     "Quad": 321409,
+     "Triple": 358970,
+     "Double": 434093
+    }
+   }
+  ],
+  "includes": [
+   "20 days / 19 nights",
    "Return ticket",
    "Umrah visa",
    "Hotels",
