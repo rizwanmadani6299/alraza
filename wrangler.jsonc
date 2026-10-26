@@ -2,6 +2,8 @@
   "name": "alraza",
   "main": "src/worker.js",
   "compatibility_date": "2026-10-01",
+  // D1 database: Cloudflare > D1 > Create "alraza" > copy ID, phir neeche wali line se // hata kar THE_ID ki jagah ID likhein:
+  // "d1_databases": [ { "binding": "DB", "database_name": "alraza", "database_id": "THE_ID" } ],
   "vars": { "SHEET_CSV_URL": "https://docs.google.com/spreadsheets/d/14O7XqJb4uTe4edKwBQ9JMq5wTQbYE8MT7m-BMmpJHWI/export?format=csv&gid=0" },
   "assets": {
     "directory": "./public",
