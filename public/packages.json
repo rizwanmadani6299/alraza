@@ -95,7 +95,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "20 kg"
  },
  {
   "id": "karachi-2026-10-26",
@@ -344,7 +349,12 @@
    "Madinah Ziyarat"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "PA 170",
+  "out_time": "01:30 – 04:30",
+  "flight_back": "PA 171",
+  "back_time": "05:40 – 11:50",
+  "baggage": "20"
  },
  {
   "id": "islamabad-2026-10-27",
@@ -509,7 +519,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "PA 272",
+  "out_time": "",
+  "flight_back": "PA 271",
+  "back_time": "",
+  "baggage": "20 kg"
  },
  {
   "id": "islamabad-2026-11-06",
@@ -674,7 +689,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "PA 270",
+  "out_time": "",
+  "flight_back": "PA 271",
+  "back_time": "",
+  "baggage": "20 kg"
  },
  {
   "id": "multan-2026-11-12",
@@ -772,7 +792,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "20 kg"
  },
  {
   "id": "karachi-2026-11-12",
@@ -939,7 +964,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "9P 600",
+  "out_time": "",
+  "flight_back": "9P 601",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "karachi-2026-11-14",
@@ -1177,7 +1207,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "multan-2026-11-19",
@@ -1343,7 +1378,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "karachi-2026-11-21",
@@ -1581,7 +1621,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "karachi-2026-11-23",
@@ -1819,7 +1864,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "multan-2026-11-24",
@@ -1985,7 +2035,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "karachi-2026-11-25",
@@ -2223,7 +2278,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "karachi-2026-11-28",
@@ -2461,7 +2521,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "multan-2026-11-29",
@@ -2627,7 +2692,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "As per airline"
  },
  {
   "id": "multan-2026-11-30",
@@ -2725,7 +2795,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "20 kg"
  },
  {
   "id": "islamabad-2026-12-19",
@@ -2890,7 +2965,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "PA 272",
+  "out_time": "",
+  "flight_back": "PA 273",
+  "back_time": "",
+  "baggage": "20 kg"
  },
  {
   "id": "multan-2027-01-01",
@@ -2988,7 +3068,12 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "",
+  "out_time": "",
+  "flight_back": "",
+  "back_time": "",
+  "baggage": "23 kg"
  },
  {
   "id": "islamabad-2027-01-06",
@@ -3153,6 +3238,11 @@
    "24/7 support"
   ],
   "currency": "PKR",
-  "per": "person"
+  "per": "person",
+  "flight_out": "SV 729",
+  "out_time": "",
+  "flight_back": "SV 726",
+  "back_time": "",
+  "baggage": "23 kg"
  }
 ]

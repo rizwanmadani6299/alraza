@@ -1,6 +1,5 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Al Raza Travel</title><meta name="theme-color" content="#0f5a44">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Al Raza Travel</title><link rel="icon" href="/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Sora:wght@600;700;800&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap">
 <style>
 :root{box-sizing:border-box;--bg:#eaf1ed;--ink:#0c1a14;--mut:#5d6f66;--card:rgba(255,255,255,.68);--line:rgba(12,26,20,.09);--a:#0a9f77;--b:#c8962a;--bad:#d6382b;--o:.22}
@@ -263,8 +262,7 @@ html[lang="ur"] .wm b,html[lang="ur"] .hn b,html[lang="ur"] .h2,html[lang="ur"] 
 .spm em{font:600 italic 22px "Cormorant Garamond",Georgia,serif;color:#e9cf8a}
 .spc i{border-color:rgba(184,146,58,.5);color:#f4efe3}
 #sp .ld u{background:#b8923a}
-</style></head><body>
-
+</style>
 
 <div class="aur"></div>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -285,7 +283,7 @@ html[lang="ur"] .wm b,html[lang="ur"] .hn b,html[lang="ur"] .h2,html[lang="ur"] 
  <div class="spm"><em>Umrah, digitalised.</em></div>
  <div class="spc"><i>Bookings</i><i>Hotels</i><i>Payments</i><i>Reports</i></div>
 
- <div id="lg3"><canvas id="cv" width="420" height="420"></canvas></div>
+ <div id="lg3"></div>
  <svg id="lw" viewBox="0 78 320 120">
   <text class="t1" x="160" y="122" text-anchor="middle">AL RAZA</text>
   <line class="ln1" x1="50" x2="270" y1="140" y2="140"/>
@@ -302,103 +300,7 @@ html[lang="ur"] .wm b,html[lang="ur"] .hn b,html[lang="ur"] .h2,html[lang="ur"] 
 <div class="dock" id="dock" style="display:none"><div class="nav gl" id="nav"></div><button class="plus" onclick="plus()">+</button></div>
 <div class="modal" id="m" onclick="if(event.target===this)closeF()"><div class="sheet" id="sh"></div></div>
 <div id="toast"></div>
-
-<div id="fbgate" style="display:none;position:fixed;inset:0;z-index:90;background:var(--bg);overflow:auto">
- <div class="wrap" style="max-width:440px;padding-top:44px">
-  <div class="wm" style="justify-content:center;margin-bottom:20px"><svg viewBox="0 0 100 100"><use href="#cres"/></svg><div><b>AL RAZA</b><small>TRAVEL</small></div></div>
-  <div class="card gl" style="animation:none">
-   <h3 style="font-size:20px;margin:0 0 4px">Sign in</h3>
-   <div class="mut" style="margin-bottom:14px">Agents sign in with the username and password given by Al Raza Travel.</div>
-   <div class="seg" style="margin-bottom:14px"><button id="fga" class="on" onclick="fbMode('agent')">Agent</button><button id="fgb" onclick="fbMode('admin')">Administrator</button></div>
-   <label id="fgl">Username</label><input id="fgu" autocapitalize="none" autocomplete="username" spellcheck="false">
-   <label style="margin-top:10px">Password</label><input id="fgp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')fbGo()">
-   <div id="fgm" style="min-height:22px;margin-top:10px;font-size:13px;line-height:1.4"></div>
-   <button class="pb" id="fgs" onclick="fbGo()">Sign in</button>
-   <button class="pb ghost" id="fgf" style="display:none" onclick="fbForgot()">Forgot password?</button>
-  </div>
- </div>
-</div>
-
-<script>/* Al Raza Travel — Firebase layer. Gives the app the same tiny "claude" API (db, user, downloads) on top of Firebase. */
-window.__fbP=new Promise(r=>{window.__fbR=r});
-window.claude={use:async n=>{const s=await window.__fbP;return s[n]||null}};
-window.FB={signOut:()=>window.__fbOut&&window.__fbOut(),mkAgent:(a,p,r)=>window.__fbMk(a,p,r),rmAgent:a=>window.__fbRm(a),chPw:(o,n)=>window.__fbPw(o,n)};
-(function(){
-const CFG={
- "apiKey": "AIzaSyB_hs2QYewT5nteFmaV42XIz0pZRMVOw8o",
- "authDomain": "al-raza-travel.firebaseapp.com",
- "projectId": "al-raza-travel",
- "storageBucket": "al-raza-travel.firebasestorage.app",
- "messagingSenderId": "968655937337",
- "appId": "1:968655937337:web:79048744f52f5b0c9a52e8"
-};
-const g=i=>document.getElementById(i);
-let L=null,app,auth,db,ID="",OWN=false,mode="agent",ready=0;
-const today=()=>new Date().toISOString().slice(0,10);
-const gm=(t,ok)=>{const e=g("fgm");if(e){e.textContent=t||"";e.style.color=ok?"var(--a)":"var(--bad)"}};
-const gate=on=>{const e=g("fbgate");if(e)e.style.display=on?"block":"none"};
-const emsg=e=>{const c=(e&&e.code)||"";
- if(/invalid-credential|wrong-password|user-not-found|invalid-email|missing-password/.test(c))return mode==="agent"?"Wrong username or password":"Wrong email or password";
- if(/too-many/.test(c))return"Too many attempts. Please wait a few minutes and try again.";
- if(/network/.test(c))return"No internet connection. Please try again.";
- if(/api-key/.test(c))return"The Firebase API key is not valid. Please contact the developer.";
- if(c==="permission-denied")return"Access denied. Please contact Al Raza Travel.";
- return"Could not sign in ("+(c||(e&&e.message)||"error")+")"};
-window.fbMode=m=>{mode=m;g("fga").classList.toggle("on",m==="agent");g("fgb").classList.toggle("on",m==="admin");
- g("fgl").textContent=m==="agent"?"Username":"Email";g("fgu").type=m==="agent"?"text":"email";g("fgu").value="";g("fgp").value="";gm("");g("fgf").style.display=m==="admin"?"block":"none"};
-window.fbGo=async()=>{const u=g("fgu").value.trim(),p=g("fgp").value;
- if(!u||!p){gm("Enter your "+(mode==="agent"?"username":"email")+" and password");return}
- const b=g("fgs");b.disabled=true;gm("");
- try{let em=u;
-  if(mode==="agent"){const l=await L.getDoc(L.doc(db,"login/"+u.toLowerCase().replace(/\s/g,"")));if(!l.exists()){gm("Wrong username or password");b.disabled=false;return}em=l.data().em}
-  await L.signInWithEmailAndPassword(auth,em,p)}catch(e){gm(emsg(e))}
- b.disabled=false};
-window.fbForgot=async()=>{const u=g("fgu").value.trim();if(!u){gm("Type your email first, then tap Forgot password");return}
- try{await L.sendPasswordResetEmail(auth,u);gm("Password reset email sent. Check your inbox.",1)}catch(e){gm(emsg(e))}};
-const forceOut=()=>{try{sessionStorage.setItem("fb_msg","Your login was changed or removed. Please sign in again.")}catch(e){}L.signOut(auth).then(()=>location.reload(),()=>location.reload())};
-const mkDb=()=>{
- const sd=s=>({id:s.id,exists:s.exists(),data:()=>s.exists()?s.data():undefined});
- const cs=s=>({docs:s.docs.map(d=>({id:d.id,exists:true,data:()=>d.data()})),size:s.size,empty:s.empty});
- const cl=d=>JSON.parse(JSON.stringify(d));
- const bad=(p,e)=>{if(!OWN&&e&&e.code==="permission-denied"&&(/^creds\//.test(p)||p==="agents/"+ID))forceOut()};
- return{doc:p=>{const r=L.doc(db,p);return{
-   get:async()=>sd(await L.getDoc(r)),
-   set:async d=>{await L.setDoc(r,cl(d))},
-   update:async d=>{d=cl(d);await L.setDoc(r,d,{mergeFields:Object.keys(d)})},
-   delete:async()=>{await L.deleteDoc(r)},
-   onSnapshot:(n,e)=>L.onSnapshot(r,s=>n(sd(s)),er=>{bad(p,er);e&&e(er)})}},
-  collection:p=>{const r=L.collection(db,p);return{
-   get:async()=>cs(await L.getDocs(r)),
-   onSnapshot:(n,e)=>L.onSnapshot(r,s=>n(cs(s)),er=>{bad(p,er);e&&e(er)})}}}};
-const dl=async o=>{const ext=String(o.filename).split(".").pop().toLowerCase(),type={csv:"text/csv;charset=utf-8",json:"application/json",html:"text/html;charset=utf-8",txt:"text/plain;charset=utf-8"}[ext]||"application/octet-stream";
- const b=o.data instanceof Blob?o.data:new Blob([o.data],{type});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);return{ok:true}};
-async function afterAuth(u){if(ready)return;
- try{let adm=false;
-  try{await L.getDoc(L.doc(db,"meta/admin"));adm=true}catch(e){if(!e||e.code!=="permission-denied")throw e}
-  if(adm){ID="admin";OWN=true}
-  else{const m=await L.getDoc(L.doc(db,"uids/"+u.uid));
-   if(!m.exists()){gm("This login is not set up for the app. Please contact Al Raza Travel.");await L.signOut(auth);gate(true);return}
-   ID=m.data().aid;OWN=false;try{await L.setDoc(L.doc(db,"creds/"+ID),{bound:ID,last:today()},{merge:true})}catch(e){}}
-  ready=1;gate(false);
-  window.__fbR({db:mkDb(),user:{id:async()=>ID,isOwner:async()=>OWN,me:async()=>({email:u.email||"",name:""})},downloads:{save:dl}})
- }catch(e){gm(emsg(e));gate(true)}}
-window.__initShim=function(Lb){L=Lb;
- try{app=L.initializeApp(CFG);auth=L.getAuth(app);db=L.initializeFirestore(app,{ignoreUndefinedProperties:true,experimentalAutoDetectLongPolling:true})}
- catch(e){gm("Could not start: "+((e&&e.message)||e));gate(true);return}
- try{const m=sessionStorage.getItem("fb_msg");if(m){gm(m);sessionStorage.removeItem("fb_msg")}}catch(e){}
- L.onAuthStateChanged(auth,u=>{if(u)afterAuth(u);else gate(true)},e=>{gm(emsg(e));gate(true)})};
-window.__fbOut=async()=>{try{await L.signOut(auth)}catch(e){}location.reload()};
-window.__fbMk=async(aid,pw,reset)=>{
- const app2=L.initializeApp(CFG,"sec"+Date.now()),a2=L.getAuth(app2),em=`${aid}-${Math.random().toString(36).slice(2,7)}@agents.alrazatravel.app`;
- let uid;try{const c=await L.createUserWithEmailAndPassword(a2,em,pw);uid=c.user.uid;await L.signOut(a2)}finally{try{await L.deleteApp(app2)}catch(e){}}
- let old=null;if(reset){const l=await L.getDoc(L.doc(db,"login/"+aid));if(l.exists())old=l.data().uid}
- await L.setDoc(L.doc(db,"uids/"+uid),{aid});await L.setDoc(L.doc(db,"login/"+aid),{em,uid});
- if(old&&old!==uid){try{await L.deleteDoc(L.doc(db,"uids/"+old))}catch(e){}}};
-window.__fbRm=async aid=>{const l=await L.getDoc(L.doc(db,"login/"+aid));if(l.exists()){const u=l.data().uid;if(u)try{await L.deleteDoc(L.doc(db,"uids/"+u))}catch(e){}await L.deleteDoc(L.doc(db,"login/"+aid))}};
-window.__fbPw=async(o,n)=>{const u=auth.currentUser;await L.reauthenticateWithCredential(u,L.EmailAuthProvider.credential(u.email,o));await L.updatePassword(u,n)};
-})();
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="/claude-shim.js"></script><script src="/poster.js"></script><script src="/post-tools.js"></script>
 <script>
 const $=i=>document.getElementById(i);
 const IC=["🛂","✈️","🏨","🚌"],SN=["Visa","Ticket","Hotel voucher","Transport"];
@@ -726,30 +628,24 @@ const lDel=async id=>{const l=lfind(id);if(S.del===id){S.del=null;try{await DB.d
 const mkUser=n=>{const b=(String(n).toLowerCase().split(/\s+/)[0]||"agent").replace(/[^a-z0-9]/g,"").slice(0,10)||"agent";for(let i=0;i<50;i++){const u=b+String(Math.floor(Math.random()*90)+10);if(!CRS.find(x=>x.id===u))return u}return b+Date.now().toString(36).slice(-5)};
 const rate=a=>!(+a.cv>0)?"No commission":a.ct==="pp"?fmt(a.cv)+" per pilgrim":a.cv+"% of sale";
 function agV(){const top=`<button class="pb" style="margin:0 0 12px" onclick="openAg()">+ Add agent</button>`;
- if(!CRS.length)return top+`<div class="card gl"><h3>No agents yet</h3><p class="mut" style="line-height:1.6">Tap <b>Add agent</b>. The app creates a username and password for each agent. Share the website link with them, then give them the username and password.</p></div>`;
+ if(!CRS.length)return top+`<div class="card gl"><h3>No agents yet</h3><p class="mut" style="line-height:1.6">Tap <b>Add agent</b>. The app creates a username and password for each agent. Give each agent the username and password. They open the website, tap Login and sign in with them.</p></div>`;
  return top+CRS.slice().sort((a,b)=>(a.name||"")>(b.name||"")?1:-1).map(a=>{const bs=BK[a.bound]||[],A=bs.filter(x=>x.status!=="Cancelled"),st=a.active===false?"Suspended":a.bound?"Active":"Not signed in",ce=comEarn(bs,a),cp=cPaid(a);
  return`<div class="card gl"><div class="row"><div class="av">${esc((a.name||"?")[0].toUpperCase())}</div><div class="gr"><h3>${esc(a.name)}</h3><div class="mut">@${esc(a.id)}${a.city?" · "+esc(a.city):""}${a.phone?" · "+esc(a.phone):""}${a.last?"<br>Last sign-in "+fd(a.last):""}</div></div><span class="bd s-${st==="Active"?"Completed":st==="Suspended"?"Cancelled":"Booked"}">${st}</span></div>
  <div class="grid" style="margin:12px 0 0"><div class="box"><b style="font-size:18px">${A.length}</b><span>Bookings</span></div><div class="box"><b style="font-size:16px">${fmt(sum(A,b=>b.total))}</b><span>Sales</span></div><div class="box"><b style="font-size:16px">${fmt(ce)}</b><span>Commission earned · ${esc(rate(a))}</span></div><div class="box"><b class="${ce-cp>0?"n":"z"}" style="font-size:16px">${fmt(ce-cp)}</b><span>Commission due (paid ${fmt(cp)})</span></div></div>
  <div class="acts"><button onclick="agPay('${a.id}')">Pay commission</button><button onclick="agCom('${a.id}')">Commission rate</button><button onclick="agReset('${a.id}')">${S.del==="r"+a.id?"Confirm reset?":"Reset password"}</button>${a.active===false?`<button class="pri" onclick="agTog('${a.id}')">Reactivate</button>`:`<button class="d" onclick="agTog('${a.id}')">Suspend</button>`}${a.bound?`<button onclick="S.ag='${a.bound}';go('book')">Bookings</button>`:`<button class="d" onclick="agDel('${a.id}')">${S.del==="d"+a.id?"Confirm?":"Delete"}</button>`}</div></div>`}).join("")}
 function openAg(){sheet(`<h2 class="h2">New agent</h2><div class="g2">${fi("agn","Full name *","","text",1)}${fi("ap","Phone","","tel")}${fi("ac","City / office")}${sel("act","Commission",["Percent of sale","Fixed per pilgrim"],"Percent of sale")}${fi("acv","Rate (% or PKR)","","number")}</div><div class="mut" style="margin-top:8px">A username and password are created automatically.</div><button class="pb" onclick="agCreate()">Create agent</button><button class="pb ghost" onclick="closeF()">Cancel</button>`)}
-async function agCreate(){const n=val("agn");if(!n){toast("Please enter the agent name");return}
- const u=mkUser(n),pw=genPw();
- try{await FB.mkAgent(u,pw,false)}catch(e){toast("Could not create the login ("+((e&&e.code)||"error")+")");return}
- const o={name:n,phone:val("ap"),city:val("ac"),active:true,bound:"",ct:$("act").value==="Fixed per pilgrim"?"pp":"pct",cv:+$("acv").value||0,cp:[],created:iso(TD)};
- if(await wr("creds/"+u,o)){await wr("agents/"+u,{name:n,phone:val("ap"),city:val("ac"),uname:u,created:iso(TD)});logA("Created agent: "+n);credS(u,pw,n)}}
-function credS(u,pw,n){const t=`Assalam o Alaikum ${n}, your ${AGY.name} agent login:\nUsername: ${u}\nPassword: ${pw}\nWebsite: ${location.origin}${location.pathname}\nChoose the Agent tab to sign in. Please keep these details private.`;
+async function agCreate(){const n=val("agn");if(!n){toast("Please enter the agent name");return}  try{const r=await claudeApi("/api/users","POST",{name:n,phone:val("ap"),city:val("ac"),ct:$("act").value==="Fixed per pilgrim"?"pp":"pct",cv:+$("acv").value||0,role:"agent"});logA("Created agent: "+n);credS(r.username,r.password,n)}catch(e){toast("Could not create the agent")}}
+function credS(u,pw,n){const t=`Assalam o Alaikum ${n}, your ${AGY.name} agent login:\nUsername: ${u}\nPassword: ${pw}\nOpen the website, tap Login and sign in. Keep these details private.`;
  sheet(`<h2 class="h2">Agent login ready</h2><div class="mut">Share these details now. The password is not stored and cannot be shown again (you can reset it any time).</div><div class="hold" style="text-align:center"><div class="mut">Username</div><b style="font-size:22px">${esc(u)}</b><div class="mut" style="margin-top:10px">Password</div><b style="font-size:26px;letter-spacing:.08em">${esc(pw)}</b></div><div class="acts"><button onclick="try{navigator.clipboard.writeText(${esc(JSON.stringify(t)).replace(/'/g,"&#39;")});toast('Copied')}catch(e){toast('Copy not available')}">Copy</button><a class="w" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(t)}">WhatsApp</a></div><button class="pb ghost" onclick="closeF()">Done</button>`)}
-async function agReset(id){const a=CRS.find(x=>x.id===id);if(S.del!=="r"+id){S.del="r"+id;setTimeout(()=>{S.del=null;R()},3000);R();return}S.del=null;
- const pw=genPw();try{await FB.mkAgent(id,pw,true)}catch(e){toast("Could not reset ("+((e&&e.code)||"error")+")");return}
- if(await wr("creds/"+id,{bound:""},"update")){logA("Reset password: "+a.name);credS(id,pw,a.name)}}
-async function agTog(id){const a=CRS.find(x=>x.id===id),on=a.active===false;if(await wr("creds/"+id,{active:on},"update")){logA((on?"Reactivated":"Suspended")+" agent: "+a.name);toast(on?"Agent reactivated":"Agent suspended")}}
+async function agReset(id){const a=CRS.find(x=>x.id===id);if(S.del!=="r"+id){S.del="r"+id;setTimeout(()=>{S.del=null;R()},3000);R();return}S.del=null;  try{const r=await claudeApi("/api/users/password","POST",{username:id});logA("Reset password: "+a.name);credS(id,r.password,a.name)}catch(e){toast("Could not reset the password")}}
+async function agTog(id){const a=CRS.find(x=>x.id===id),on=a.active===false;try{await claudeApi("/api/users/status","POST",{username:id,suspended:!on});logA((on?"Reactivated":"Suspended")+" agent: "+a.name);toast(on?"Agent reactivated":"Agent suspended")}catch(e){toast("Could not update the agent")}}
 function agCom(id){const a=CRS.find(x=>x.id===id);sheet(`<h2 class="h2">Commission · ${esc(a.name)}</h2><div class="g2">${sel("act","Type",["Percent of sale","Fixed per pilgrim"],a.ct==="pp"?"Fixed per pilgrim":"Percent of sale")}${fi("acv","Rate (% or PKR)",a.cv||"","number")}</div><div class="mut" style="margin-top:8px">Commission is earned on Confirmed and Completed bookings.</div><button class="pb" onclick="agComS('${id}')">Save</button><button class="pb ghost" onclick="closeF()">Cancel</button>`)}
 async function agComS(id){if(await wr("creds/"+id,{ct:$("act").value==="Fixed per pilgrim"?"pp":"pct",cv:+$("acv").value||0},"update")){closeF();toast("Commission updated")}}
 function agPay(id){const a=CRS.find(x=>x.id===id),ce=comEarn(BK[a.bound]||[],a),cp=cPaid(a),L=a.cp||[];
  sheet(`<h2 class="h2">Commission · ${esc(a.name)}</h2><div class="mut">Earned ${fmt(ce)} · Paid ${fmt(cp)} · <b class="${ce-cp>0?"n":"z"}">Due ${fmt(ce-cp)}</b></div>${L.map((p,i)=>`<div class="ln"><div class="gr"><b>${fmt(p.a)}</b><span class="mut">${fd(p.d)}${p.n?" · "+esc(p.n):""}</span></div><button class="sm wn" onclick="agPd('${id}',${i})">${S.del==="c"+i?"Confirm?":"Remove"}</button></div>`).join("")}<div class="sh">RECORD PAYMENT</div><div class="g2">${fi("cpa","Amount (PKR)",ce-cp>0?ce-cp:"","number")}${fi("cpd2","Date",iso(TD),"date")}${fi("cpn","Note (method / reference)","","text",1)}</div><button class="pb" onclick="agPs('${id}')">Save commission payment</button><button class="pb ghost" onclick="closeF()">Close</button>`)}
 async function agPs(id){const a=CRS.find(x=>x.id===id),m=+$("cpa").value;if(!(m>0)){toast("Enter an amount");return}const cp=(a.cp||[]).concat([{d:$("cpd2").value||iso(TD),a:m,n:val("cpn")}]);if(await wr("creds/"+id,{cp},"update")){logA(`Commission paid ${fmt(m)} · ${a.name}`);a.cp=cp;agPay(id);toast("Saved")}}
 async function agPd(id,i){const a=CRS.find(x=>x.id===id);if(S.del!=="c"+i){S.del="c"+i;setTimeout(()=>{S.del=null},2500);agPay(id);return}S.del=null;const cp=(a.cp||[]).slice(),x=cp.splice(i,1)[0];if(await wr("creds/"+id,{cp},"update")){logA(`Removed commission payment ${fmt(x.a)} · ${a.name}`);a.cp=cp;agPay(id)}}
-async function agDel(id){if(S.del!=="d"+id){S.del="d"+id;setTimeout(()=>{S.del=null;R()},2500);R();return}S.del=null;try{await DB.doc("creds/"+id).delete();try{await DB.doc("agents/"+id).delete()}catch(e){}try{await FB.rmAgent(id)}catch(e){}toast("Agent deleted")}catch(e){toast("Could not delete")}}
+async function agDel(id){if(S.del!=="d"+id){S.del="d"+id;setTimeout(()=>{S.del=null;R()},2500);R();return}S.del=null;try{await claudeApi("/api/users?username="+encodeURIComponent(id),"DELETE");toast("Agent deleted")}catch(e){toast("Could not delete")}}
 /* kits & stock */
 function kitsV(){const L=bks().filter(b=>b.status==="Booked"||b.status==="Confirmed"),men=sum(L,b=>b.men||0),wom=sum(L,b=>b.women||0),kid=sum(L,b=>b.kids||0),unk=sum(L,b=>(b.men||b.women||b.kids)?0:b.persons||0);
  return back("more","More")+`<div class="mut" style="margin-bottom:10px">Planning is based on pending bookings (Booked and Confirmed). Complimentary kits are deducted from stock when you issue them on a booking.</div><div class="grid"><div class="box gl"><b>${men}</b><span>Men</span></div><div class="box gl"><b>${wom}</b><span>Women</span></div><div class="box gl"><b>${kid}</b><span>Children</span></div><div class="box gl"><b>${men+wom+kid+unk}</b><span>Total pilgrims${unk?` (${unk} without gender)`:""}</span></div></div><button class="pb" style="margin:0 0 12px" onclick="kitE()">+ Add kit</button>`+kits().map(k=>{const s=kitStat(k);return`<div class="card gl"><div class="row"><h3>${esc(k.n)}</h3><span class="bd">${KR[k.r]||k.r}</span></div><div class="px"><div><b>${+k.s||0}</b><span>In stock</span></div><div><b>${s.iss}</b><span>Issued</span></div><div><b>${Math.max(0,s.av)}</b><span>Available</span></div></div><div class="row"><span class="mut">Still to hand out: <b>${s.pend}</b></span><b class="${s.buy>0?"n":"z"}">${s.buy>0?"Buy "+s.buy+" more":"Stock is enough"}</b></div><div class="acts"><button onclick="kitA('${k.id}')">Add stock</button><button onclick="kitE('${k.id}')">Edit</button></div></div>`}).join("")}
@@ -783,7 +679,7 @@ async function saveN(){const t=val("nt");if(!t){toast("Enter a title");return}if
 async function delN(id){if(S.del!=="n"+id){S.del="n"+id;setTimeout(()=>{S.del=null;R()},2500);R();return}S.del=null;try{await DB.doc("news/"+id).delete();toast("Deleted")}catch(e){toast("Could not delete")}}
 const logV=()=>back("more","More")+`<div class="mut" style="margin-bottom:10px">Latest 150 actions by agents and admin.</div><div class="box gl">${LOG.length?LOG.map(l=>`<div class="ln"><div class="gr"><b>${esc(l.t)}</b><span class="mut">${esc(l.u)} · ${l.at?new Date(l.at).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):""}</span></div></div>`).join(""):'<div class="mut">Nothing logged yet.</div>'}</div>`;
 /* more + csv */
-const moreV=()=>`<div class="hj" style="margin:0 0 12px">${fd(TD)}${hij()?" · "+hij():""}</div>`+(OWN?mi("✈️","Departures","Groups by date and printable manifests","go('dep')")+mi("📊","Reports","Monthly sales, profit and agent statements","go('rep')")+mi("📦","Packages","Create and edit Umrah packages","go('pk')")+mi("🎒","Kits & stock","Complimentary kits, stock and shortages","go('kits')")+mi("🏨","Hotels & rates","Hotel list with SAR and PKR rates","go('hot')")+mi("🧾","Expenses & payables","Vendor payments and cash position","go('exp')")+mi("📣","Announcements","Post news to all agents","go('news')")+mi("🕓","Activity log","Who changed what","go('log')")+mi("📤","Export to CSV","Bookings, payments, leads, expenses","go('csv')")+mi("💾","Full backup","Save all data as one file","backup()")+mi("🕋","Umrah guide","Steps and packing list to share","go('gd')")+mi("⚙️","Settings","Agency profile, requirements, Hijri date, theme","go('set')")+mi("🚪","Sign out","Sign out of this device","logout()"):mi("✈️","Departures","Groups by date and printable manifests","go('dep')")+mi("📊","My statement","Monthly report and commission statement","go('rep')")+mi("📣","Announcements","News from head office","go('news')")+mi("🕋","Umrah guide","Steps and packing list to share","go('gd')")+mi("📤","Export my data","Bookings, payments and leads as CSV","go('csv')")+mi("⚙️","Account","Profile, password and theme","go('set')")+mi("🚪","Sign out","Return to the login screen","logout()"));
+const moreV=()=>`<div class="hj" style="margin:0 0 12px">${fd(TD)}${hij()?" · "+hij():""}</div>`+mi("🖼️","Post maker","Make package posters with your number","openPost()")+mi("🗂️","Posts","Posters already made","openPosts()")+(OWN?mi("✈️","Departures","Groups by date and printable manifests","go('dep')")+mi("📊","Reports","Monthly sales, profit and agent statements","go('rep')")+mi("📦","Packages","Create and edit Umrah packages","go('pk')")+mi("🎒","Kits & stock","Complimentary kits, stock and shortages","go('kits')")+mi("🏨","Hotels & rates","Hotel list with SAR and PKR rates","go('hot')")+mi("🧾","Expenses & payables","Vendor payments and cash position","go('exp')")+mi("📣","Announcements","Post news to all agents","go('news')")+mi("🕓","Activity log","Who changed what","go('log')")+mi("📤","Export to CSV","Bookings, payments, leads, expenses","go('csv')")+mi("💾","Full backup","Save all data as one file","backup()")+mi("🕋","Umrah guide","Steps and packing list to share","go('gd')")+mi("⚙️","Settings","Agency profile, requirements, Hijri date, theme","go('set')")+mi("👁","Preview agent login","See the sign-in screen agents use","S.pv=1;render()"):mi("✈️","Departures","Groups by date and printable manifests","go('dep')")+mi("📊","My statement","Monthly report and commission statement","go('rep')")+mi("📣","Announcements","News from head office","go('news')")+mi("🕋","Umrah guide","Steps and packing list to share","go('gd')")+mi("📤","Export my data","Bookings, payments and leads as CSV","go('csv')")+mi("⚙️","Account","Profile, password and theme","go('set')")+mi("🚪","Sign out","Return to the login screen","logout()"));
 const csvQ=v=>{let s=String(v==null?"":v);if(/^[=+\-@]/.test(s)&&isNaN(Number(s)))s="'"+s;return`"${s.replace(/"/g,'""')}"`};
 const CSVS={
  bk:["Bookings","bookings",()=>[["Ref","Client","Phone","Agent","Package","Room","Men","Women","Children","Pilgrims","Departure","Return","Status","Total","Received","Balance","Cost","Commission","Cancellation charge","Passport","Passport expiry","PNR","Created"]].concat(bks().map(b=>[refOf(b.id),b.name,b.phone,agName(b.aid),b.pkg,b.rt,b.men||0,b.women||0,b.kids||0,b.persons,b.dep,b.ret,b.status,b.total,paid(b),b.total-paid(b),b.cost||0,comOf(b),b.cc||0,b.passport,b.ppExp,b.pnr,b.created]))],
@@ -800,14 +696,12 @@ function setV(){const sg=(v,l)=>`<button class="${TH===v?"on":""}" onclick="TH='
  const th=`<div class="sh">APPEARANCE</div><div class="seg">${sg("auto","Auto")}${sg("light","Light")}${sg("dark","Dark")}</div>`;
  if(OWN)return back("more","More")+`<div class="sh">AGENCY PROFILE (shown on documents)</div><div class="box gl"><div class="g2">${fi("sn","Agency name",AGY.name,"text",1)}${fi("sph","Phone",AGY.phone)}${fi("sad","Address",AGY.addr)}${fi("ssr","Exchange rate: 1 SAR = ? PKR",AGY.sar||75,"number")}${fi("sof","Offer banner text (shown on Home)",AGY.offer,"text",1)}${fi("soe","Offer ends on",AGY.offEnd,"date")}${fi("sft","Document footer message",AGY.foot,"text",1)}${fi("scx","Cancellation policy (shown on brochures)",AGY.cancel,"text",1)}${sel("shj","Hijri date adjustment (days)",["-1","0","1"],String(+AGY.hj||0))}${fi("ssr","1 SAR = PKR (approx.)",AGY.sar||75,"number")}</div><div class="mut" style="margin-top:6px">Today: ${hij()||"not available"}. Adjust by one day to match the local moon sighting.</div><button class="pb" onclick="saveAgy()">Save profile</button></div>
  <div class="sh">BOOKING CONFIRMATION REQUIREMENTS</div><div class="box gl"><div class="mut">Clients book first and are confirmed later. List what a client must provide before confirmation (one per line).</div><div class="g2" style="margin-top:10px">${ta("sr","Requirements",REQ().join("\n"))}${fi("shd","Confirmation deadline (days after booking)",AGY.hold||7,"number")}</div><button class="pb" onclick="saveAgy()">Save requirements</button></div>
- <div class="sh">AGENT ACCOUNTS</div><div class="box gl mut" style="line-height:1.6">Create agents from the <b>Agents</b> tab. Each agent gets an auto-generated username and password. Suspending an agent blocks them immediately. Resetting a password signs them out everywhere. Share the website link together with the username and password.</div>${th}`;
+ <div class="sh">AGENT ACCOUNTS</div><div class="box gl mut" style="line-height:1.6">Create agents from the <b>Agents</b> tab. Each agent gets an auto-generated username and password, signs in once, and the login is locked to that one account. Suspending an agent blocks them immediately. Resetting a password signs them out everywhere. Remember to also share the app link (Share menu, Contributor) so they can open the app.</div>${th}`;
  return`<div class="sh">MY ACCOUNT</div><div class="box gl"><div class="g2">${fi("an1","Full name",ME&&ME.name,"text",1)}${fi("ap1","Phone",ME&&ME.phone)}${fi("ac1","City / office",ME&&ME.city)}</div><div class="mut" style="margin-top:8px">Username: <b>${esc(ME&&ME.uname||"")}</b></div><button class="pb" onclick="saveMe()">Save</button></div>
  <div class="sh">CHANGE PASSWORD</div><div class="box gl"><div class="g2">${fi("pw0","Current password","","password",1)}${fi("pw1","New password (6+ characters)","","password",1)}</div><button class="pb" onclick="chPw()">Change password</button></div>${th}<button class="pb ghost" style="margin-top:16px" onclick="logout()">Sign out</button>`}
 async function saveAgy(){Object.assign(AGY,{name:val("sn")||"Al Raza Travel",phone:val("sph"),addr:val("sad"),sar:+$("ssr").value||75,offer:val("sof"),offEnd:val("soe"),foot:val("sft"),cancel:val("scx"),hj:+$("shj").value||0,sar:+$("ssr").value||75,req:val("sr").split("\n").map(x=>x.trim()).filter(Boolean),hold:+$("shd").value||7});if(await wr("settings/agency",AGY))toast("Saved")}
 async function saveMe(){const o={name:val("an1"),phone:val("ap1"),city:val("ac1")};if(await wr("agents/"+UID,o,"update")){if(ME&&ME.uname)await wr("creds/"+ME.uname,o,"update");toast("Saved")}}
-async function chPw(){const a=$("pw0").value,b=$("pw1").value;if(b.length<6){toast("New password must be at least 6 characters");return}
- try{await FB.chPw(a,b)}catch(e){toast(/credential|password/.test((e&&e.code)||"")?"Current password is wrong":"Could not change the password");return}
- logA("Password changed");$("pw0").value="";$("pw1").value="";toast("Password changed")}
+async function chPw(){const a=$("pw0").value,b=$("pw1").value;if(b.length<6){toast("New password must be at least 6 characters");return}  try{await claudeApi("/api/auth/password","POST",{oldPassword:a,newPassword:b});logA("Password changed");$("pw0").value="";$("pw1").value="";toast("Password changed")}catch(e){toast(e.message==="bad_login"?"Current password is wrong":"Could not change the password")}}
 /* login */
 async function doLogin(){if(OWN){toast("Preview only: you are already signed in as Super Admin");return}
  const u=val("lu").toLowerCase().replace(/\s/g,""),pw=$("lpw").value;
@@ -830,10 +724,10 @@ async function doLogin(){if(OWN){toast("Preview only: you are already signed in 
   await wr("locks/"+u,{n:0,until:0});
   lsS("ar_lo",null);logA("Agent signed in: "+c.name);S.tab="home";setRole();toast("Signed in")
  }finally{const b=$("lgb");if(b)b.disabled=false}}
-const logout=()=>{FB.signOut()};
+const logout=()=>{claudeLogout()};
 function gate(){const c=(t,b,x)=>`<div class="card gl" style="margin-top:30px"><h3 style="font-size:20px">${t}</h3><p class="mut" style="line-height:1.6">${b}</p>${x||""}</div>`,lo=`<button class="pb ghost" onclick="logout()">Sign out</button>`;
  if(ROLE==="load")return`<div class="empty">Loading…</div>`;
- if(ROLE==="nodb")return c("Sign-in required","Could not connect. Please check your internet connection and reload the page.");
+ if(ROLE==="nodb")return c("Sign-in required","Please open this app through the link shared by Al Raza Travel while signed in to Claude. If you have not received a link, please contact Al Raza Travel.");
  if(ROLE==="blocked")return c("Account suspended","Your access has been paused by the administrator. Please contact Al Raza Travel.",lo);
  if(ROLE==="gone")return c("Account removed","This login no longer exists. Please contact Al Raza Travel.",lo);
  const moved=ME&&ME.uname&&CR&&CR.bound!==UID;
@@ -886,7 +780,7 @@ async function pkDel(id){try{await DB.doc("packages/"+id).delete();closeF();toas
 const pkCostLn=p=>{const r=RT.map(t=>{const c=stayCost(p.mk,p.md,t),pv=(p.pr||{})[t];return c.ok&&pv?`${t}: hotels ${sp(c.s,c.p)} · margin ${fmt(pv-c.p)}`:""}).filter(Boolean);return r.length?`<div class="hl"><b>Hotel cost (per person)</b><div class="mut">${r.join("<br>")}</div></div>`:""};
 
 const L3={on:1};
-function logo3d(){const fb=()=>{$("lg3").innerHTML='<svg viewBox="0 0 100 100" style="width:130px;height:130px;color:#c9a24a;animation:fi 1.2s both"><use href="#cres"/></svg>'};
+function logo3d(){const fb=()=>{$("lg3").innerHTML='<img src="/logo-final.png" alt="Al Raza Travel" style="height:210px;width:auto;animation:fi 1.2s both">'};
  if(!window.THREE)return fb();
  try{const T=THREE,sc=new T.Scene(),cam=new T.PerspectiveCamera(32,1,.1,50);cam.position.set(0,0,7.2);
   const rd=new T.WebGLRenderer({canvas:$("cv"),antialias:true,alpha:true});rd.setPixelRatio(Math.min(window.devicePixelRatio||1,2));rd.setSize(210,210,false);
@@ -1743,10 +1637,5 @@ function rcpt(id,i){const b=find(id),p=(b.pays||[])[i];if(!p)return;const no=`${
 
 render();boot();
 </script>
-<script type="module">
-import {initializeApp,deleteApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword,sendPasswordResetEmail,updatePassword,EmailAuthProvider,reauthenticateWithCredential} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {initializeFirestore,doc,collection,getDoc,getDocs,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-window.__initShim({initializeApp,deleteApp,getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword,sendPasswordResetEmail,updatePassword,EmailAuthProvider,reauthenticateWithCredential,initializeFirestore,doc,collection,getDoc,getDocs,setDoc,deleteDoc,onSnapshot});
-</script>
+
 </body></html>

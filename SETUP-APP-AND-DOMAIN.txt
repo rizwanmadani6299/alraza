@@ -1,0 +1,23 @@
+AL RAZA  -  APP + WEBSITE + DOMAIN  (one-time setup)
+Website: https://alrazatravelhub.com        App / login: https://alrazatravelhub.com/app   (the Login button on the website opens it)
+
+A) DATABASE (free)  - stores the app data, users and posts
+   Cloudflare dashboard > Storage & Databases > D1 SQL Database > Create database (name: alraza) > copy the Database ID.
+   Put it in wrangler.jsonc inside the main braces (replace THE_ID) and upload that file to GitHub:
+     "d1_databases": [ { "binding": "DB", "database_name": "alraza", "database_id": "THE_ID" } ],
+   (Or send the ID to Claude and it will add it.) The tables are created automatically on first use.
+
+B) SECRETS  - Worker > Settings > Variables and Secrets > Add (type: Secret)
+   ADMIN_PASS   = password for the Administration login (username: administration)
+   AUTH_SECRET  = long random text, never share it
+
+C) DOMAIN
+   1. Cloudflare dashboard > Add a domain > alrazatravelhub.com. Change the nameservers at the place where the domain was bought.
+   2. When it shows Active: Workers & Pages > your worker > Settings > Domains & Routes > Add > Custom domain.
+      Add alrazatravelhub.com and www.alrazatravelhub.com.
+   Until then the old workers.dev address keeps working.
+
+D) WHATSAPP (AutoResponder, both phones)  URL:  https://alrazatravelhub.com/api/bot
+   (before the domain is active use the workers.dev address: /api/bot)
+
+Roles: Administration (owner) and Admin see everything, create agents, suspend, reset passwords. Agent sees only own leads, bookings and posts.

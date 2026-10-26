@@ -10,7 +10,7 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
-- CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alraza.travelcom.workers.dev/
+- CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alrazatravelhub.com/
 - Address: A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
 - Travel partners: Amere Taiba International (Muhammad Raees), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
@@ -347,6 +347,192 @@ async function packagesApi(req, env) {
   return new Response(JSON.stringify(list), { headers: { "Content-Type": "application/json", ...CORS } });
 }
 
+// ---------- Panel + app: logins, users, posts and the app database (Cloudflare D1) ----------
+const enc = new TextEncoder();
+const b64u = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64u = (s) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+async function hmac(secret, data) { const k = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]); return b64u(await crypto.subtle.sign("HMAC", k, enc.encode(data))); }
+async function pbkdf(pass, salt) { const k = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveBits"]); return b64u(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations: 10000 }, k, 256)); }
+function same(a, b) { a = String(a); b = String(b); if (a.length !== b.length) return false; let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0; }
+async function mkToken(env, u) { const body = b64u(enc.encode(JSON.stringify({ u: u.username, r: u.role, n: u.name, p: u.phone || "", e: Date.now() + 12 * 3600e3 }))); return body + "." + await hmac(env.AUTH_SECRET, body); }
+async function readToken(env, req) {
+  const h = req.headers.get("authorization") || "", t = h.startsWith("Bearer ") ? h.slice(7) : "", [b, sg] = t.split(".");
+  if (!b || !sg || !env.AUTH_SECRET || !same(sg, await hmac(env.AUTH_SECRET, b))) return null;
+  try { const o = JSON.parse(new TextDecoder().decode(unb64u(b))); return o.e > Date.now() ? { username: o.u, role: o.r, name: o.n, phone: o.p } : null; } catch (e) { return null; }
+}
+const RANK = { administration: 3, admin: 2, agent: 1 };
+function normPhone(v) { let d = String(v || "").replace(/\D/g, ""); if (d.startsWith("92")) d = "0" + d.slice(2); if (d.length === 10 && d[0] === "3") d = "0" + d; return /^03\d{9}$/.test(d) ? d : null; }
+let DB_READY = false;
+async function dbInit(env) {
+  if (DB_READY) return;
+  await env.DB.batch([
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, name TEXT, phone TEXT, role TEXT, salt TEXT, hash TEXT, suspended INTEGER DEFAULT 0, created TEXT, last_login TEXT)"),
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, created TEXT, dep TEXT, combos TEXT, agent_name TEXT, agent_phone TEXT, by_user TEXT)"),
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS docs (path TEXT PRIMARY KEY, parent TEXT, data TEXT, updated INTEGER)"),
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS docs_parent ON docs(parent)"),
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS vers (parent TEXT PRIMARY KEY, v INTEGER)")
+  ]);
+  DB_READY = true;
+}
+function genPw() { const A = "abcdefghjkmnpqrstuvwxyz23456789"; return [...crypto.getRandomValues(new Uint8Array(8))].map(x => A[x % A.length]).join(""); }
+const bumpV = (env, parent) => env.DB.prepare("INSERT INTO vers(parent,v) VALUES(?,1) ON CONFLICT(parent) DO UPDATE SET v=v+1").bind(parent);
+const parentOf = (path) => { const i = path.lastIndexOf("/"); return i < 0 ? "" : path.slice(0, i); };
+function canDb(me, op, path) {
+  if (RANK[me.role] >= 2) return true;
+  const sg = path.split("/"), root = sg[0], mine = sg[1] === me.username, rd = op === "get" || op === "list";
+  if (rd) return path === "settings/agency" || root === "packages" || root === "news" || (root === "agents" && mine) || (root === "creds" && mine) || root === "bdocs" || root === "ppx";
+  return (root === "agents" && mine) || root === "bdocs" || root === "ppx" || (root === "log" && op === "set");
+}
+async function panelApi(req, env, u) {
+  const P = u.pathname, M = req.method, J = (o, st) => { const r = json(o, st || 200); r.headers.set("cache-control", "no-store"); return r; };
+  const body = async () => (M === "POST" ? await req.json().catch(() => ({})) : {});
+  const adm = String(env.ADMIN_USER || "administration").toLowerCase();
+  if (P === "/api/posts" && M === "GET" && !u.searchParams.get("mine")) {
+    if (!env.DB) return J([]);
+    await dbInit(env);
+    const ids = new Set(upcoming(await loadPackages(req, env)).map(p => p.id));
+    const r = await env.DB.prepare("SELECT * FROM posts ORDER BY id LIMIT 60").all();
+    return J((r.results || []).filter(x => ids.has(x.dep)).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, by: x.by_user })));
+  }
+  if (P === "/api/auth/login" && M === "POST") {
+    if (!env.AUTH_SECRET || !env.ADMIN_PASS) return J({ error: "not_configured" }, 503);
+    if (limited("login:" + (req.headers.get("cf-connecting-ip") || "x"))) return J({ error: "too_many" }, 429);
+    const b = await body(), name = String(b.username || "").trim().toLowerCase(), pass = String(b.password || "");
+    if (name === adm && same(pass, env.ADMIN_PASS)) { const user = { username: adm, role: "administration", name: "Administration", phone: "" }; return J({ token: await mkToken(env, user), user }); }
+    if (!env.DB) return J({ error: "bad_login" }, 401);
+    await dbInit(env);
+    const rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(name).first();
+    const h = await pbkdf(pass, rec ? unb64u(rec.salt) : enc.encode("dummy-salt-0123456"));
+    if (!rec || !same(h, rec.hash)) return J({ error: "bad_login" }, 401);
+    if (rec.suspended) return J({ error: "suspended" }, 403);
+    await env.DB.prepare("UPDATE users SET last_login=? WHERE username=?").bind(new Date().toISOString(), name).run();
+    const user = { username: rec.username, role: rec.role, name: rec.name, phone: rec.phone };
+    return J({ token: await mkToken(env, user), user });
+  }
+  const me = await readToken(env, req);
+  if (!me) return J({ error: "auth" }, 401);
+  if (!env.DB) return J({ error: "no_db" }, 503);
+  await dbInit(env);
+  if (me.role !== "administration") {
+    const row = await env.DB.prepare("SELECT suspended FROM users WHERE username=?").bind(me.username).first();
+    if (!row) return J({ error: "auth" }, 401);
+    if (row.suspended) return J({ error: "suspended" }, 403);
+  }
+  if (P === "/api/auth/me") return J({ user: me });
+  if (P === "/api/auth/password" && M === "POST") {
+    const b = await body(), np = String(b.newPassword || "");
+    if (me.role === "administration" || np.length < 6) return J({ error: "bad_fields" }, 400);
+    const rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(me.username).first();
+    if (!rec || !same(await pbkdf(String(b.oldPassword || ""), unb64u(rec.salt)), rec.hash)) return J({ error: "bad_login" }, 401);
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    await env.DB.prepare("UPDATE users SET salt=?, hash=? WHERE username=?").bind(b64u(salt), await pbkdf(np, salt), me.username).run();
+    return J({ ok: true });
+  }
+  // ---- app database (Firestore-like) ----
+  if (P === "/api/db" && M === "POST") {
+    const b = await body(), op = String(b.op || ""), path = String(b.path || "");
+    if (!/^[A-Za-z0-9_.\- ]+(\/[A-Za-z0-9_.\- ]+)*$/.test(path) || path.length > 200) return J({ error: "bad_path" }, 400);
+    if (!canDb(me, op, path)) return J({ error: "forbidden" }, 403);
+    if (me.role === "agent" && path.split("/")[0] === "bdocs") {
+      const ex = op === "list" ? null : await env.DB.prepare("SELECT data FROM docs WHERE path=?").bind(path).first();
+      const owner = ex ? JSON.parse(ex.data).aid : ((op === "set" || op === "update") && b.data ? b.data.aid : null);
+      if (op === "list" || owner !== me.username) return J({ error: "forbidden" }, 403);
+    }
+    const segs = path.split("/").length;
+    if (op === "list") {
+      if (segs % 2 === 0) return J({ error: "bad_path" }, 400);
+      const vr = await env.DB.prepare("SELECT v FROM vers WHERE parent=?").bind(path).first(), v = vr ? vr.v : 0;
+      if (b.v !== undefined && b.v === v) return J({ same: true, v });
+      const r = await env.DB.prepare("SELECT path,data FROM docs WHERE parent=? LIMIT 5000").bind(path).all();
+      return J({ v, docs: (r.results || []).map(x => ({ id: x.path.slice(path.length + 1), data: JSON.parse(x.data) })) });
+    }
+    if (segs % 2 === 1) return J({ error: "bad_path" }, 400);
+    const par = parentOf(path);
+    if (op === "get") {
+      const r = await env.DB.prepare("SELECT data,updated FROM docs WHERE path=?").bind(path).first();
+      if (b.v !== undefined && b.v === (r ? r.updated : 0)) return J({ same: true, v: b.v });
+      return J(r ? { exists: true, v: r.updated, data: JSON.parse(r.data) } : { exists: false, v: 0 });
+    }
+    if (op === "delete") { await env.DB.batch([env.DB.prepare("DELETE FROM docs WHERE path=?").bind(path), bumpV(env, par)]); return J({ ok: true }); }
+    if (op === "set" || op === "update") {
+      let data = b.data && typeof b.data === "object" ? b.data : null;
+      if (!data || JSON.stringify(data).length > 900000) return J({ error: "bad_data" }, 400);
+      if (op === "update") { const r = await env.DB.prepare("SELECT data FROM docs WHERE path=?").bind(path).first(); data = Object.assign(r ? JSON.parse(r.data) : {}, data); }
+      await env.DB.batch([env.DB.prepare("INSERT INTO docs(path,parent,data,updated) VALUES(?,?,?,?) ON CONFLICT(path) DO UPDATE SET data=excluded.data, updated=excluded.updated").bind(path, par, JSON.stringify(data), Date.now()), bumpV(env, par)]);
+      return J({ ok: true });
+    }
+    return J({ error: "bad_op" }, 400);
+  }
+  // ---- users ----
+  if (P === "/api/users" && M === "GET") {
+    if (RANK[me.role] < 2) return J({ error: "forbidden" }, 403);
+    const r = await env.DB.prepare("SELECT u.username,u.name,u.phone,u.role,u.suspended,u.created,u.last_login,(SELECT COUNT(*) FROM posts p WHERE p.by_user=u.username) AS posts FROM users u ORDER BY u.created").all();
+    return J(r.results || []);
+  }
+  if (P === "/api/users" && M === "POST") {
+    if (RANK[me.role] < 2) return J({ error: "forbidden" }, 403);
+    const b = await body(), role = b.role === "admin" ? "admin" : "agent", nm = String(b.name || "").trim().slice(0, 40);
+    const ph = b.phone ? (normPhone(b.phone) || String(b.phone).trim().slice(0, 20)) : "", city = String(b.city || "").slice(0, 40);
+    if (RANK[role] >= RANK[me.role]) return J({ error: "forbidden" }, 403);
+    let un = String(b.username || "").trim().toLowerCase();
+    if (!un) { const base = (nm.toLowerCase().split(/\s+/)[0] || "agent").replace(/[^a-z0-9]/g, "").slice(0, 10) || "agent"; for (let i = 0; i < 40; i++) { const c = base + (10 + Math.floor(Math.random() * 90)); if (!(await env.DB.prepare("SELECT 1 FROM users WHERE username=?").bind(c).first()) && c !== adm) { un = c; break; } } }
+    const pw = String(b.password || "") || genPw();
+    if (!/^[a-z0-9._-]{3,24}$/.test(un) || un === adm) return J({ error: "bad_username" }, 400);
+    if (!nm || pw.length < 6) return J({ error: "bad_fields" }, 400);
+    if (await env.DB.prepare("SELECT 1 FROM users WHERE username=?").bind(un).first()) return J({ error: "exists" }, 409);
+    const salt = crypto.getRandomValues(new Uint8Array(16)), st = [env.DB.prepare("INSERT INTO users(username,name,phone,role,salt,hash,suspended,created) VALUES(?,?,?,?,?,?,0,?)").bind(un, nm, ph || "", role, b64u(salt), await pbkdf(pw, salt), new Date().toISOString())];
+    if (role === "agent") st.push(env.DB.prepare("INSERT INTO docs(path,parent,data,updated) VALUES(?,?,?,?) ON CONFLICT(path) DO UPDATE SET data=excluded.data, updated=excluded.updated").bind("creds/" + un, "creds", JSON.stringify({ name: nm, phone: ph || "", city, active: true, bound: un, ct: b.ct === "pp" ? "pp" : "pct", cv: Number(b.cv) || 0, cp: [], created: new Date().toISOString().slice(0, 10) }), Date.now()), bumpV(env, "creds"));
+    await env.DB.batch(st);
+    return J({ ok: true, username: un, password: pw });
+  }
+  if (P === "/api/users/password" && M === "POST") {
+    const b = await body(), un = String(b.username || "").toLowerCase(), rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(un).first();
+    if (!rec || RANK[me.role] < 2 || RANK[rec.role] >= RANK[me.role]) return J({ error: "forbidden" }, 403);
+    const pw = String(b.password || "") || genPw();
+    if (pw.length < 6) return J({ error: "bad_fields" }, 400);
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    await env.DB.prepare("UPDATE users SET salt=?, hash=? WHERE username=?").bind(b64u(salt), await pbkdf(pw, salt), un).run();
+    return J({ ok: true, password: pw });
+  }
+  if (P === "/api/users/status" && M === "POST") {
+    const b = await body(), un = String(b.username || "").toLowerCase(), rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(un).first();
+    if (!rec || RANK[me.role] < 2 || RANK[rec.role] >= RANK[me.role]) return J({ error: "forbidden" }, 403);
+    const sus = b.suspended ? 1 : 0, cr = await env.DB.prepare("SELECT data FROM docs WHERE path=?").bind("creds/" + un).first();
+    const st = [env.DB.prepare("UPDATE users SET suspended=? WHERE username=?").bind(sus, un)];
+    if (cr) { const d = JSON.parse(cr.data); d.active = !sus; st.push(env.DB.prepare("UPDATE docs SET data=?, updated=? WHERE path=?").bind(JSON.stringify(d), Date.now(), "creds/" + un), bumpV(env, "creds")); }
+    await env.DB.batch(st); return J({ ok: true });
+  }
+  if (P === "/api/users" && M === "DELETE") {
+    const un = String(u.searchParams.get("username") || "").toLowerCase(), rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(un).first();
+    if (!rec || RANK[me.role] < 2 || RANK[rec.role] >= RANK[me.role]) return J({ error: "forbidden" }, 403);
+    await env.DB.batch([env.DB.prepare("DELETE FROM users WHERE username=?").bind(un), env.DB.prepare("DELETE FROM docs WHERE path=?").bind("creds/" + un), bumpV(env, "creds")]);
+    return J({ ok: true });
+  }
+  // ---- posts ----
+  if (P === "/api/posts" && M === "GET") {
+    const q = RANK[me.role] >= 2 ? env.DB.prepare("SELECT * FROM posts ORDER BY id LIMIT 100") : env.DB.prepare("SELECT * FROM posts WHERE by_user=? ORDER BY id LIMIT 100").bind(me.username);
+    const r = await q.all();
+    return J((r.results || []).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, by: x.by_user })));
+  }
+  if (P === "/api/posts" && M === "POST") {
+    const b = await body(), pk = upcoming(await loadPackages(req, env)), pkg = pk.find(p => p.id === b.dep);
+    const picks = Array.isArray(b.combos) ? [...new Set(b.combos.map(Number))] : [];
+    if (!pkg || picks.length < 1 || picks.length > 4 || picks.some(i => !Number.isInteger(i) || i < 0 || i >= pkg.hotels.length)) return J({ error: "bad_post" }, 400);
+    const ph = normPhone(b.agentPhone), nm = String(b.agentName || "").trim().slice(0, 40);
+    if (me.role !== "administration" && (!ph || !nm)) return J({ error: "need_number" }, 400);
+    if (b.agentPhone && !ph) return J({ error: "bad_phone" }, 400);
+    const id = "p:" + String(9e12 - Date.now()).padStart(13, "0") + "-" + crypto.randomUUID().slice(0, 6), created = new Date().toISOString();
+    await env.DB.prepare("INSERT INTO posts(id,created,dep,combos,agent_name,agent_phone,by_user) VALUES(?,?,?,?,?,?,?)").bind(id, created, pkg.id, JSON.stringify(picks), nm, ph || "", me.username).run();
+    return J({ id, created, dep: pkg.id, combos: picks, agent: { name: nm, phone: ph || "" }, by: me.username });
+  }
+  if (P === "/api/posts" && M === "DELETE") {
+    const id = String(u.searchParams.get("id") || ""), rec = await env.DB.prepare("SELECT by_user FROM posts WHERE id=?").bind(id).first();
+    if (!rec || (RANK[me.role] < 2 && rec.by_user !== me.username)) return J({ error: "forbidden" }, 403);
+    await env.DB.prepare("DELETE FROM posts WHERE id=?").bind(id).run(); return J({ ok: true });
+  }
+  return J({ error: "not_found" }, 404);
+}
+
 export default {
   async fetch(req, env, ctx) {
     const u = new URL(req.url);
@@ -362,6 +548,9 @@ export default {
     }
     if (u.pathname === "/api/packages") {
       try { return await packagesApi(req, env); } catch (e) { return json([], 200); }
+    }
+    if (u.pathname.startsWith("/api/auth/") || u.pathname === "/api/users" || u.pathname === "/api/users/password" || u.pathname === "/api/users/status" || u.pathname === "/api/db" || u.pathname === "/api/posts") {
+      try { return await panelApi(req, env, u); } catch (e) { return json({ error: "server_error" }, 500); }
     }
     if (u.pathname === "/api/chat") {
       try { return await chat(req, env); } catch (e) { return json({ error: "server" }, 500); }
