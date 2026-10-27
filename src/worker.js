@@ -11,7 +11,7 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
 - CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alrazatravelhub.com/
-- Address: Lane 1, Khayaban Sehr, near Faizan Islam Masjid, Phase 07, DHA, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
+- Address: Plot No. C3, First Floor, Lane-10, Near Faizan-e-Islam Masjid, Khayaban-e-Sehar, Phase-7, Defence, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
 - Travel partners: Amere Taiba International (Muhammad Raees), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
 - Booking: reserve your seat first, then complete documents and advance payment to confirm. Payment methods: JazzCash, Easypaisa, online banking, cheque, pay order. Every payment is confirmed on WhatsApp with the team, who share account details there.
@@ -229,7 +229,7 @@ function keywordReply(m, pk) {
   if (/ticket|flight/.test(m)) return "✈️ *Air Tickets*\nDomestic aur international tickets available hain. Route aur date bata dein, team rate bata degi.\n\n" + TEAM;
   if (/group/.test(m)) return "👥 *Group Travel*\nFamilies aur groups ke liye behtar rates. Group size aur mahina bata dein.\n\n" + TEAM;
   if (/payment|pay|account|jazz|easypaisa|bank/.test(m)) return "💳 *Payment*\nJazzCash, Easypaisa, online banking, cheque, pay order. Account details team WhatsApp par share karti hai.\n\n" + TEAM;
-  if (/address|office|location|kahan/.test(m)) return "📍 Lane 1, Khayaban Sehr, near Faizan Islam Masjid, Phase 07, DHA, Karachi.\n\n" + TEAM;
+  if (/address|office|location|kahan/.test(m)) return "📍 Plot No. C3, First Floor, Lane-10, Near Faizan-e-Islam Masjid, Khayaban-e-Sehar, Phase-7, Defence, Karachi.\n\n" + TEAM;
   const UR = { "کراچی": "Karachi", "لاہور": "Lahore", "اسلام آباد": "Islamabad", "ملتان": "Multan" };
   const uc = Object.keys(UR).find(k => m.includes(k));
   if (uc) return cityReply(UR[uc], pk);
@@ -376,13 +376,14 @@ async function dbInit(env) {
   if (DB_READY) return;
   await env.DB.batch([
     env.DB.prepare("CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, name TEXT, phone TEXT, role TEXT, salt TEXT, hash TEXT, suspended INTEGER DEFAULT 0, created TEXT, last_login TEXT)"),
-    env.DB.prepare("CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, created TEXT, dep TEXT, combos TEXT, agent_name TEXT, agent_phone TEXT, by_user TEXT)"),
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, created TEXT, dep TEXT, combos TEXT, agent_name TEXT, agent_phone TEXT, by_user TEXT, office TEXT)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS docs (path TEXT PRIMARY KEY, parent TEXT, data TEXT, updated INTEGER)"),
     env.DB.prepare("CREATE INDEX IF NOT EXISTS docs_parent ON docs(parent)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS vers (parent TEXT PRIMARY KEY, v INTEGER)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS settings (k TEXT PRIMARY KEY, v TEXT)"),
     env.DB.prepare("INSERT OR IGNORE INTO users(username,name,phone,role,salt,hash,suspended,created) VALUES('administration','Administration','','administration',?,?,0,?)").bind(SEED_SALT, SEED_HASH, new Date().toISOString())
   ]);
+  try { await env.DB.prepare("ALTER TABLE posts ADD COLUMN office TEXT").run(); } catch (e) {}
   DB_READY = true;
 }
 function genPw() { const A = "abcdefghjkmnpqrstuvwxyz23456789"; return [...crypto.getRandomValues(new Uint8Array(8))].map(x => A[x % A.length]).join(""); }
@@ -403,7 +404,7 @@ async function panelApi(req, env, u) {
     await dbInit(env);
     const ids = new Set(upcoming(await loadPackages(req, env)).map(p => p.id));
     const r = await env.DB.prepare("SELECT * FROM posts ORDER BY id LIMIT 60").all();
-    return J((r.results || []).filter(x => ids.has(x.dep)).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, by: x.by_user })));
+    return J((r.results || []).filter(x => ids.has(x.dep)).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, office: x.office || "", by: x.by_user })));
   }
   if (P === "/api/auth/login" && M === "POST") {
     if (!env.DB) return J({ error: "no_db" }, 503);
@@ -523,18 +524,18 @@ async function panelApi(req, env, u) {
   if (P === "/api/posts" && M === "GET") {
     const q = RANK[me.role] >= 2 ? env.DB.prepare("SELECT * FROM posts ORDER BY id LIMIT 100") : env.DB.prepare("SELECT * FROM posts WHERE by_user=? ORDER BY id LIMIT 100").bind(me.username);
     const r = await q.all();
-    return J((r.results || []).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, by: x.by_user })));
+    return J((r.results || []).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, office: x.office || "", by: x.by_user })));
   }
   if (P === "/api/posts" && M === "POST") {
     const b = await body(), pk = upcoming(await loadPackages(req, env)), pkg = pk.find(p => p.id === b.dep);
     const picks = Array.isArray(b.combos) ? [...new Set(b.combos.map(Number))] : [];
     if (!pkg || picks.length < 1 || picks.length > 4 || picks.some(i => !Number.isInteger(i) || i < 0 || i >= pkg.hotels.length)) return J({ error: "bad_post" }, 400);
-    const ph = normPhone(b.agentPhone), nm = String(b.agentName || "").trim().slice(0, 40);
+    const ph = normPhone(b.agentPhone), nm = String(b.agentName || "").trim().slice(0, 40), off = b.office ? (normPhone(b.office) || String(b.office).replace(/[^0-9+\- ]/g, "").slice(0, 20)) : "";
     if (me.role !== "administration" && (!ph || !nm)) return J({ error: "need_number" }, 400);
     if (b.agentPhone && !ph) return J({ error: "bad_phone" }, 400);
     const id = "p:" + String(9e12 - Date.now()).padStart(13, "0") + "-" + crypto.randomUUID().slice(0, 6), created = new Date().toISOString();
-    await env.DB.prepare("INSERT INTO posts(id,created,dep,combos,agent_name,agent_phone,by_user) VALUES(?,?,?,?,?,?,?)").bind(id, created, pkg.id, JSON.stringify(picks), nm, ph || "", me.username).run();
-    return J({ id, created, dep: pkg.id, combos: picks, agent: { name: nm, phone: ph || "" }, by: me.username });
+    await env.DB.prepare("INSERT INTO posts(id,created,dep,combos,agent_name,agent_phone,by_user,office) VALUES(?,?,?,?,?,?,?,?)").bind(id, created, pkg.id, JSON.stringify(picks), nm, ph || "", me.username, off).run();
+    return J({ id, created, dep: pkg.id, combos: picks, agent: { name: nm, phone: ph || "" }, office: off, by: me.username });
   }
   if (P === "/api/posts" && M === "DELETE") {
     const id = String(u.searchParams.get("id") || ""), rec = await env.DB.prepare("SELECT by_user FROM posts WHERE id=?").bind(id).first();
