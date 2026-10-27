@@ -1,23 +1,16 @@
-AL RAZA  -  APP + WEBSITE + DOMAIN  (one-time setup)
+AL RAZA  -  APP + WEBSITE + DOMAIN
+
 Website: https://alrazatravelhub.com        App / login: https://alrazatravelhub.com/app   (the Login button on the website opens it)
 
-A) DATABASE (free)  - stores the app data, users and posts
-   Cloudflare dashboard > Storage & Databases > D1 SQL Database > Create database (name: alraza) > copy the Database ID.
-   Put it in wrangler.jsonc inside the main braces (replace THE_ID) and upload that file to GitHub:
-     "d1_databases": [ { "binding": "DB", "database_name": "alraza", "database_id": "THE_ID" } ],
-   (Or send the ID to Claude and it will add it.) The tables are created automatically on first use.
+1) DATABASE  - already connected (D1 id is in wrangler.jsonc). Tables and the first Administration login are created automatically.
+   First login: username  administration   (the password was given to you in the chat)
+   Change it right away: App > More > Change my password.
+2) OPTIONAL SECRETS  (only if you want the Administration password to live in Cloudflare instead of the database)
+   Worker > Settings > Variables and Secrets: ADMIN_PASS (password) and AUTH_SECRET (long random text). If set, they win.
+3) DOMAIN
+   Cloudflare dashboard > Add a domain > alrazatravelhub.com (change nameservers), then
+   Worker > Settings > Domains & Routes > Add > Custom domain: alrazatravelhub.com and www.alrazatravelhub.com.
+4) WHATSAPP (AutoResponder, both phones)  URL:  https://alrazatravelhub.com/api/bot
 
-B) SECRETS  - Worker > Settings > Variables and Secrets > Add (type: Secret)
-   ADMIN_PASS   = password for the Administration login (username: administration)
-   AUTH_SECRET  = long random text, never share it
-
-C) DOMAIN
-   1. Cloudflare dashboard > Add a domain > alrazatravelhub.com. Change the nameservers at the place where the domain was bought.
-   2. When it shows Active: Workers & Pages > your worker > Settings > Domains & Routes > Add > Custom domain.
-      Add alrazatravelhub.com and www.alrazatravelhub.com.
-   Until then the old workers.dev address keeps working.
-
-D) WHATSAPP (AutoResponder, both phones)  URL:  https://alrazatravelhub.com/api/bot
-   (before the domain is active use the workers.dev address: /api/bot)
-
-Roles: Administration (owner) and Admin see everything, create agents, suspend, reset passwords. Agent sees only own leads, bookings and posts.
+Roles: Administration and Admin see everything, create agents, suspend, reset passwords. Agent sees only own leads, bookings and posts.
+Passwords are stored only as hashes: nobody can read them. Use Reset to give an agent a new password.

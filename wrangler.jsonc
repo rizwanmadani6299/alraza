@@ -3,6 +3,7 @@
   "main": "src/worker.js",
   "compatibility_date": "2026-10-01",
   "vars": { "SHEET_CSV_URL": "https://docs.google.com/spreadsheets/d/14O7XqJb4uTe4edKwBQ9JMq5wTQbYE8MT7m-BMmpJHWI/export?format=csv&gid=0" },
+  "d1_databases": [ { "binding": "DB", "database_name": "alraza", "database_id": "78a1b727-96e6-4e75-85cd-2a9d6e449033" } ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

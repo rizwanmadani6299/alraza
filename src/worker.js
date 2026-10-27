@@ -11,7 +11,7 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
 - CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alrazatravelhub.com/
-- Address: A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
+- Address: Lane 1, Khayaban Sehr, near Faizan Islam Masjid, Phase 07, DHA, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
 - Travel partners: Amere Taiba International (Muhammad Raees), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
 - Booking: reserve your seat first, then complete documents and advance payment to confirm. Payment methods: JazzCash, Easypaisa, online banking, cheque, pay order. Every payment is confirmed on WhatsApp with the team, who share account details there.
@@ -229,7 +229,7 @@ function keywordReply(m, pk) {
   if (/ticket|flight/.test(m)) return "✈️ *Air Tickets*\nDomestic aur international tickets available hain. Route aur date bata dein, team rate bata degi.\n\n" + TEAM;
   if (/group/.test(m)) return "👥 *Group Travel*\nFamilies aur groups ke liye behtar rates. Group size aur mahina bata dein.\n\n" + TEAM;
   if (/payment|pay|account|jazz|easypaisa|bank/.test(m)) return "💳 *Payment*\nJazzCash, Easypaisa, online banking, cheque, pay order. Account details team WhatsApp par share karti hai.\n\n" + TEAM;
-  if (/address|office|location|kahan/.test(m)) return "📍 A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi.\n\n" + TEAM;
+  if (/address|office|location|kahan/.test(m)) return "📍 Lane 1, Khayaban Sehr, near Faizan Islam Masjid, Phase 07, DHA, Karachi.\n\n" + TEAM;
   const UR = { "کراچی": "Karachi", "لاہور": "Lahore", "اسلام آباد": "Islamabad", "ملتان": "Multan" };
   const uc = Object.keys(UR).find(k => m.includes(k));
   if (uc) return cityReply(UR[uc], pk);
@@ -354,15 +354,24 @@ const unb64u = (s) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/
 async function hmac(secret, data) { const k = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]); return b64u(await crypto.subtle.sign("HMAC", k, enc.encode(data))); }
 async function pbkdf(pass, salt) { const k = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveBits"]); return b64u(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations: 10000 }, k, 256)); }
 function same(a, b) { a = String(a); b = String(b); if (a.length !== b.length) return false; let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0; }
-async function mkToken(env, u) { const body = b64u(enc.encode(JSON.stringify({ u: u.username, r: u.role, n: u.name, p: u.phone || "", e: Date.now() + 12 * 3600e3 }))); return body + "." + await hmac(env.AUTH_SECRET, body); }
+async function mkToken(env, u) { const body = b64u(enc.encode(JSON.stringify({ u: u.username, r: u.role, n: u.name, p: u.phone || "", e: Date.now() + 12 * 3600e3 }))); return body + "." + await hmac(await getSecret(env), body); }
 async function readToken(env, req) {
   const h = req.headers.get("authorization") || "", t = h.startsWith("Bearer ") ? h.slice(7) : "", [b, sg] = t.split(".");
-  if (!b || !sg || !env.AUTH_SECRET || !same(sg, await hmac(env.AUTH_SECRET, b))) return null;
+  if (!b || !sg || !env.DB && !env.AUTH_SECRET) return null;
+  if (!same(sg, await hmac(await getSecret(env), b))) return null;
   try { const o = JSON.parse(new TextDecoder().decode(unb64u(b))); return o.e > Date.now() ? { username: o.u, role: o.r, name: o.n, phone: o.p } : null; } catch (e) { return null; }
 }
 const RANK = { administration: 3, admin: 2, agent: 1 };
 function normPhone(v) { let d = String(v || "").replace(/\D/g, ""); if (d.startsWith("92")) d = "0" + d.slice(2); if (d.length === 10 && d[0] === "3") d = "0" + d; return /^03\d{9}$/.test(d) ? d : null; }
-let DB_READY = false;
+let DB_READY = false, SECRET_C = null;
+const SEED_SALT = "0ZhwNaCb_NhNpV3HtlTnGA", SEED_HASH = "dQMEGM6DyVkRRSWcnh08mJm_km308CzpzjP8zs9auvQ";
+async function getSecret(env) {
+  if (env.AUTH_SECRET) return env.AUTH_SECRET;
+  if (SECRET_C) return SECRET_C;
+  await env.DB.prepare("INSERT OR IGNORE INTO settings(k,v) VALUES('auth_secret',?)").bind(b64u(crypto.getRandomValues(new Uint8Array(32)))).run();
+  const r = await env.DB.prepare("SELECT v FROM settings WHERE k='auth_secret'").first();
+  return (SECRET_C = r.v);
+}
 async function dbInit(env) {
   if (DB_READY) return;
   await env.DB.batch([
@@ -370,7 +379,9 @@ async function dbInit(env) {
     env.DB.prepare("CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, created TEXT, dep TEXT, combos TEXT, agent_name TEXT, agent_phone TEXT, by_user TEXT)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS docs (path TEXT PRIMARY KEY, parent TEXT, data TEXT, updated INTEGER)"),
     env.DB.prepare("CREATE INDEX IF NOT EXISTS docs_parent ON docs(parent)"),
-    env.DB.prepare("CREATE TABLE IF NOT EXISTS vers (parent TEXT PRIMARY KEY, v INTEGER)")
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS vers (parent TEXT PRIMARY KEY, v INTEGER)"),
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS settings (k TEXT PRIMARY KEY, v TEXT)"),
+    env.DB.prepare("INSERT OR IGNORE INTO users(username,name,phone,role,salt,hash,suspended,created) VALUES('administration','Administration','','administration',?,?,0,?)").bind(SEED_SALT, SEED_HASH, new Date().toISOString())
   ]);
   DB_READY = true;
 }
@@ -395,12 +406,12 @@ async function panelApi(req, env, u) {
     return J((r.results || []).filter(x => ids.has(x.dep)).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, by: x.by_user })));
   }
   if (P === "/api/auth/login" && M === "POST") {
-    if (!env.AUTH_SECRET || !env.ADMIN_PASS) return J({ error: "not_configured" }, 503);
+    if (!env.DB) return J({ error: "no_db" }, 503);
+    await dbInit(env);
     if (limited("login:" + (req.headers.get("cf-connecting-ip") || "x"))) return J({ error: "too_many" }, 429);
     const b = await body(), name = String(b.username || "").trim().toLowerCase(), pass = String(b.password || "");
-    if (name === adm && same(pass, env.ADMIN_PASS)) { const user = { username: adm, role: "administration", name: "Administration", phone: "" }; return J({ token: await mkToken(env, user), user }); }
-    if (!env.DB) return J({ error: "bad_login" }, 401);
-    await dbInit(env);
+    if (env.ADMIN_PASS && name === adm) { if (!same(pass, env.ADMIN_PASS)) return J({ error: "bad_login" }, 401); }
+    if (env.ADMIN_PASS && name === adm) { const user = { username: adm, role: "administration", name: "Administration", phone: "" }; return J({ token: await mkToken(env, user), user }); }
     const rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(name).first();
     const h = await pbkdf(pass, rec ? unb64u(rec.salt) : enc.encode("dummy-salt-0123456"));
     if (!rec || !same(h, rec.hash)) return J({ error: "bad_login" }, 401);
@@ -409,10 +420,10 @@ async function panelApi(req, env, u) {
     const user = { username: rec.username, role: rec.role, name: rec.name, phone: rec.phone };
     return J({ token: await mkToken(env, user), user });
   }
-  const me = await readToken(env, req);
-  if (!me) return J({ error: "auth" }, 401);
   if (!env.DB) return J({ error: "no_db" }, 503);
   await dbInit(env);
+  const me = await readToken(env, req);
+  if (!me) return J({ error: "auth" }, 401);
   if (me.role !== "administration") {
     const row = await env.DB.prepare("SELECT suspended FROM users WHERE username=?").bind(me.username).first();
     if (!row) return J({ error: "auth" }, 401);
@@ -421,7 +432,7 @@ async function panelApi(req, env, u) {
   if (P === "/api/auth/me") return J({ user: me });
   if (P === "/api/auth/password" && M === "POST") {
     const b = await body(), np = String(b.newPassword || "");
-    if (me.role === "administration" || np.length < 6) return J({ error: "bad_fields" }, 400);
+    if ((env.ADMIN_PASS && me.username === adm) || np.length < 6) return J({ error: "bad_fields" }, 400);
     const rec = await env.DB.prepare("SELECT * FROM users WHERE username=?").bind(me.username).first();
     if (!rec || !same(await pbkdf(String(b.oldPassword || ""), unb64u(rec.salt)), rec.hash)) return J({ error: "bad_login" }, 401);
     const salt = crypto.getRandomValues(new Uint8Array(16));

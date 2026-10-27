@@ -16,7 +16,7 @@
         '<label class="mut">Choose 1 to 4 packages</label><div id="pmL" style="max-height:230px;overflow:auto;margin:4px 0 10px"></div>' +
         '<div class="g2"><div><label class="mut">Name on poster</label><input id="pmN" style="width:100%;padding:11px" maxlength="40" value="' + e2(U.role === "agent" ? U.name : "") + '"></div><div><label class="mut">Your number</label><input id="pmP" inputmode="tel" placeholder="03xx-xxxxxxx" style="width:100%;padding:11px" value="' + e2(U.phone || "") + '"></div></div>' +
         '<div id="pmM" class="mut" style="margin:8px 0"></div><div id="pmV" style="margin:8px 0"></div>' +
-        '<button class="pb" id="pmB">Preview</button><button class="pb" id="pmS">Save post</button><button class="pb ghost" onclick="openPosts()">My posts</button><button class="pb ghost" onclick="closeF()">Close</button>');
+        '<button class="pb" id="pmB">Preview</button><button class="pb" id="pmS">Save post</button><button class="pb ghost" id="pmE">Save each package as its own post</button><button class="pb ghost" onclick="openPosts()">My posts</button><button class="pb ghost" onclick="closeF()">Close</button>');
       function cur() { var id = $("pmD").value; return d.filter(function (p) { return p.id === id; })[0]; }
       function picks() { return [].slice.call($("pmL").querySelectorAll("input:checked")).map(function (i) { return +i.value; }); }
       function deps() { $("pmD").innerHTML = d.filter(function (p) { return p.city === $("pmC").value; }).map(function (p) { return '<option value="' + p.id + '">' + dl(p.departure_date) + " · " + e2(p.airline) + " · " + p.days + " days</option>"; }).join(""); combos(); }
@@ -26,6 +26,8 @@
       function prev() { var p = cur(), pc = picks(); if (!p || !pc.length) { $("pmM").textContent = ERR.bad_post; return Promise.reject(); } $("pmM").textContent = ""; return AlRazaPoster.render({ pkg: p, picks: pc.map(function (i) { return p.hotels[i]; }), agent: { name: $("pmN").value.trim(), phone: $("pmP").value.replace(/\D/g, "") } }).then(function (cv) { cv.style.cssText = "width:100%;border-radius:12px"; $("pmV").innerHTML = ""; $("pmV").appendChild(cv); }); }
       $("pmB").onclick = function () { prev().catch(function () { }); };
       $("pmS").onclick = function () { var p = cur(), pc = picks(); if (!p || !pc.length) { $("pmM").textContent = ERR.bad_post; return; } $("pmS").disabled = true; window.claudeApi("/api/posts", "POST", { dep: p.id, combos: pc, agentName: $("pmN").value.trim(), agentPhone: $("pmP").value.trim() }).then(function () { return prev(); }).then(function () { $("pmM").textContent = "Saved. It is now on the website too."; }).catch(function (er) { $("pmM").textContent = ERR[er && er.message] || "Could not save."; }).then(function () { $("pmS").disabled = false; }); };
+      $("pmE").onclick = function () { var p = cur(), pc = picks(); if (!p || !pc.length) { $("pmM").textContent = ERR.bad_post; return; } $("pmE").disabled = true; var n = 0, a = { name: $("pmN").value.trim(), phone: $("pmP").value.trim() };
+        pc.reduce(function (pr, i) { return pr.then(function () { return window.claudeApi("/api/posts", "POST", { dep: p.id, combos: [i], agentName: a.name, agentPhone: a.phone }).then(function () { n++; }); }); }, Promise.resolve()).then(function () { $("pmM").textContent = n + " separate posts saved. Open My posts to download them."; }).catch(function (er) { $("pmM").textContent = (ERR[er && er.message] || "Could not save.") + " (" + n + " saved)"; }).then(function () { $("pmE").disabled = false; }); };
       deps();
     });
   };
@@ -45,5 +47,9 @@
         });
       });
     }).catch(function () { $("pmL2").textContent = "Could not load posts."; });
+  };
+  window.openPw = function () {
+    sheet('<h2 class="h2">Change my password</h2><div class="mut">Choose a new password (6 or more characters).</div><label class="mut">Current password</label><input id="cpO" type="password" style="width:100%;padding:11px;margin:4px 0 10px"><label class="mut">New password</label><input id="cpN" type="password" style="width:100%;padding:11px;margin:4px 0 10px"><div id="cpM" class="mut" style="margin:8px 0"></div><button class="pb" id="cpB">Change password</button><button class="pb ghost" onclick="closeF()">Close</button>');
+    $("cpB").onclick = function () { window.claudeApi("/api/auth/password", "POST", { oldPassword: $("cpO").value, newPassword: $("cpN").value }).then(function () { $("cpM").textContent = "Password changed."; $("cpO").value = $("cpN").value = ""; }).catch(function (e) { $("cpM").textContent = e.message === "bad_login" ? "Current password is wrong." : e.message === "bad_fields" ? "New password must be 6 or more characters." : "Could not change the password."; }); };
   };
 })();

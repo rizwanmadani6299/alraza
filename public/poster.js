@@ -95,7 +95,7 @@
     if (ag) { numBlock(W * .27, "WHATSAPP / CALL", "0318-6299894", ""); numBlock(W * .73, "WHATSAPP / CALL", phone(o.agent.phone), o.agent.name || ""); c.strokeStyle = "rgba(232,197,101,.4)"; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2, cy); c.lineTo(W / 2, cy + 120); c.stroke(); }
     else numBlock(W / 2, "WHATSAPP / CALL", "0318-6299894", "");
     c.textAlign = "center"; c.fillStyle = "#fff"; c.font = "bold 24px " + SANS; c.fillText("Instagram: @alrazatravel   ·   Facebook: Al Raza Travel   ·   TikTok: @alrazatravel", W / 2, fy + 366);
-    c.fillStyle = GOLD; c.font = "bold 26px " + SANS; c.fillText("www.alrazatravelhub.com", W / 2, fy + 402); c.fillStyle = "#cfe9d8"; c.font = "20px " + SANS; c.fillText("A Area Rizwan Family Park, Sindhi Hotel, Liaquatabad, Karachi", W / 2, fy + 434); c.textAlign = "left";
+    c.fillStyle = GOLD; c.font = "bold 26px " + SANS; c.fillText("www.alrazatravelhub.com", W / 2, fy + 402); c.fillStyle = "#cfe9d8"; c.font = "20px " + SANS; c.fillText("Lane 1, Khayaban Sehr, near Faizan Islam Masjid, Phase 07, DHA, Karachi", W / 2, fy + 434); c.textAlign = "left";
     return cv;
   }
   window.AlRazaPoster = { render: render };
