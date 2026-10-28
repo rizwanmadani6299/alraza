@@ -11,8 +11,8 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
 - CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alrazatravelhub.com/
-- Address: Plot No. C3, First Floor, Lane-10, Near Faizan-e-Islam Masjid, Khayaban-e-Sehar, Phase-7, Defence, Karachi. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
-- Travel partners: Amere Taiba International (Muhammad Raees), Islamic Ziyarat (Shariq Ahmed Kashif, travel partner).
+- Address: DHA Branch: Shop No. 1, Building 3C, Lane 10, Khayaban-e-Sehar, Near Faizan Islam Masjid, Phase 7, DHA, Karachi, Pakistan. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
+- Travel partner: Amere Taiba International (Muhammad Raees).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
 - Booking: reserve your seat first, then complete documents and advance payment to confirm. Payment methods: JazzCash, Easypaisa, online banking, cheque, pay order. Every payment is confirmed on WhatsApp with the team, who share account details there.
 - Cancellation: Al Raza charges no cancellation fee of its own, but the hotel and airline cancellation policies in force apply and must be followed. The team gives the exact terms for a specific booking.
@@ -229,7 +229,7 @@ function keywordReply(m, pk) {
   if (/ticket|flight/.test(m)) return "✈️ *Air Tickets*\nDomestic aur international tickets available hain. Route aur date bata dein, team rate bata degi.\n\n" + TEAM;
   if (/group/.test(m)) return "👥 *Group Travel*\nFamilies aur groups ke liye behtar rates. Group size aur mahina bata dein.\n\n" + TEAM;
   if (/payment|pay|account|jazz|easypaisa|bank/.test(m)) return "💳 *Payment*\nJazzCash, Easypaisa, online banking, cheque, pay order. Account details team WhatsApp par share karti hai.\n\n" + TEAM;
-  if (/address|office|location|kahan/.test(m)) return "📍 Plot No. C3, First Floor, Lane-10, Near Faizan-e-Islam Masjid, Khayaban-e-Sehar, Phase-7, Defence, Karachi.\n\n" + TEAM;
+  if (/address|office|location|kahan/.test(m)) return "📍 DHA Branch: Shop No. 1, Building 3C, Lane 10, Khayaban-e-Sehar, Near Faizan Islam Masjid, Phase 7, DHA, Karachi, Pakistan.\n\n" + TEAM;
   const UR = { "کراچی": "Karachi", "لاہور": "Lahore", "اسلام آباد": "Islamabad", "ملتان": "Multan" };
   const uc = Object.keys(UR).find(k => m.includes(k));
   if (uc) return cityReply(UR[uc], pk);
@@ -399,13 +399,6 @@ async function panelApi(req, env, u) {
   const P = u.pathname, M = req.method, J = (o, st) => { const r = json(o, st || 200); r.headers.set("cache-control", "no-store"); return r; };
   const body = async () => (M === "POST" ? await req.json().catch(() => ({})) : {});
   const adm = String(env.ADMIN_USER || "administration").toLowerCase();
-  if (P === "/api/posts" && M === "GET" && !u.searchParams.get("mine")) {
-    if (!env.DB) return J([]);
-    await dbInit(env);
-    const ids = new Set(upcoming(await loadPackages(req, env)).map(p => p.id));
-    const r = await env.DB.prepare("SELECT * FROM posts ORDER BY id LIMIT 60").all();
-    return J((r.results || []).filter(x => ids.has(x.dep)).map(x => ({ id: x.id, created: x.created, dep: x.dep, combos: JSON.parse(x.combos), agent: { name: x.agent_name, phone: x.agent_phone }, office: x.office || "", by: x.by_user })));
-  }
   if (P === "/api/auth/login" && M === "POST") {
     if (!env.DB) return J({ error: "no_db" }, 503);
     await dbInit(env);

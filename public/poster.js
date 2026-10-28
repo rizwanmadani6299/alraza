@@ -1,7 +1,7 @@
 /* Al Raza Travel poster. Uses the approved flyer (poster-base.jpg) as the design and writes the live details on top. */
 (function () {
   var W = 1024, CX = 46, CY = 322, CW = 466, CH = 484, GAP = 12, HEAD = 322, FY0 = 1290, FH = 246, BAND = 78;
-  var ADDRESS = "Plot No. C3, First Floor, Lane-10, Near Faizan-e-Islam Masjid, Khayaban-e-Sehar, Phase-7, Defence, Karachi";
+  var ADDRESS = "DHA Branch: Shop No. 1, Building 3C, Lane 10, Khayaban-e-Sehar, Near Faizan Islam Masjid, Phase 7, DHA, Karachi, Pakistan";
   var MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
   var SANS = "'Segoe UI', Roboto, Arial, Helvetica, sans-serif", SERIF = "Cambria, Georgia, 'Times New Roman', serif";
   var base = new Image(), logo = new Image(); base.src = "/poster-base.jpg"; logo.src = "/logo-final.png";

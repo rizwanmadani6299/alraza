@@ -66,4 +66,3 @@ V8 - SAFAI AUR NAYE FEATURES
 - Umrah guide aur tips ab band (accordion) mein hain, kholne ke liye tap karein.
 - Har card par: poore group ka total (Travellers + / - se badlein), Compare (3 tak, muqabla table) aur Share (WhatsApp / share sheet).
 - Reserve form mein special requests (wheelchair/buzurg, bachay, infant, ladies group) aur custom package ki tafseel.
-- Ziyarat section mein partner Islamic Ziyarat - Allama Shariq Kashfi ka zikr.
