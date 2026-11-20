@@ -1,0 +1,21 @@
+1) LIVE RATES FROM GOOGLE SHEET  (website cards + bot + AI + toolkit all read it)
+ a) Google Sheets > File > Import > Upload "Al-Raza-Packages-Sheet.csv" > Replace spreadsheet. (It already holds all current packages.)
+ b) One row = one hotel combination. Rows with the same city + dep_date + airline form one departure card.
+ c) Columns: show (yes/no to hide a row), city, dep_date and ret_date (YYYY-MM-DD), airline, flight_out, out_time, flight_back, back_time,
+    baggage, days, seats_left (0 = hide the seats badge), includes (free gifts separated by ;), makkah_hotel, makkah_distance, makkah_shuttle (yes/no),
+    madinah_hotel, madinah_distance, madinah_shuttle (yes/no), sharing, quad, triple, double, single.
+    Use "sharing" OR "single" for a departure, not both (single is for departures that have Quad/Triple/Double/Single).
+    Leave a rate blank if that room is not offered. Write rates as plain numbers (209899).
+ d) To add a new departure: copy the rows of an old one, change the dates, airline and rates.
+ e) File > Share > Publish to web > choose the sheet > CSV > Publish > copy the link.
+ f) ONE-TIME: put the link in wrangler.jsonc  "vars": { "SHEET_CSV_URL": "THE LINK" }  and upload that file to GitHub (or send me the link).
+ After that, edit the sheet only. Changes show on the website, bot and AI in about 2 minutes. No zip needed.
+ If the sheet link is empty or fails, the site falls back to the built-in packages.
+
+2) INQUIRY LOG
+ Add a tab named Inquiries to the same Google Sheet. Extensions > Apps Script, paste:
+ function doPost(e){var d=JSON.parse(e.postData.contents);SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Inquiries").appendRow([new Date(),d.phone,d.message,d.reply,d.mode]);return ContentService.createTextOutput("ok")}
+ Deploy > New deployment > Web app > Anyone > copy the URL.
+ In Cloudflare: Worker > Settings > Variables > add LOG_URL = that URL.
+3) MEMORY (bot remembers last messages)
+ Cloudflare > Storage > KV > create namespace "alraza-mem". Worker > Settings > Bindings > Add > KV namespace > variable name MEM.

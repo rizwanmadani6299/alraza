@@ -1,0 +1,16 @@
+AL RAZA  -  APP + WEBSITE + DOMAIN
+
+Website: https://alrazatravelhub.com        App / login: https://alrazatravelhub.com/app   (the Login button on the website opens it)
+
+1) DATABASE  - already connected (D1 id is in wrangler.jsonc). Tables and the first Administration login are created automatically.
+   First login: username  administration   (the password was given to you in the chat)
+   Change it right away: App > More > Change my password.
+2) OPTIONAL SECRETS  (only if you want the Administration password to live in Cloudflare instead of the database)
+   Worker > Settings > Variables and Secrets: ADMIN_PASS (password) and AUTH_SECRET (long random text). If set, they win.
+3) DOMAIN
+   Cloudflare dashboard > Add a domain > alrazatravelhub.com (change nameservers), then
+   Worker > Settings > Domains & Routes > Add > Custom domain: alrazatravelhub.com and www.alrazatravelhub.com.
+4) WHATSAPP (AutoResponder, both phones)  URL:  https://alrazatravelhub.com/api/bot
+
+Roles: Administration and Admin see everything, create agents, suspend, reset passwords. Agent sees only own leads, bookings and posts.
+Passwords are stored only as hashes: nobody can read them. Use Reset to give an agent a new password.
