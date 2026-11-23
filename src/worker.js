@@ -373,16 +373,16 @@ async function bot(req, env, ctx) {
     mode = body.mode || mode;
   }
   const lm = String(message).toLowerCase().trim();
-  if (mode !== "all" && !SALAM_RX.test(lm) && !HI_RX.test(lm) && !pkgIntent(message)) {
+  if (mode === "travel" && !SALAM_RX.test(lm) && !HI_RX.test(lm) && !pkgIntent(message)) {
     return new Response(JSON.stringify({ reply: "", replies: [] }), { headers: { "Content-Type": "application/json", ...CORS } });
   }
   const pk = await loadPackages(req, env);
-  let hist = [];
-  if (env.MEM && phone !== "guest") { try { hist = JSON.parse((await env.MEM.get("h:" + phone)) || "[]"); } catch (e) {} }
+  const hist = await memGet(env, String(phone));
   let replyText = await botReply(message, pk, env, String(phone), hist, req);
-  if (env.MEM && phone !== "guest") { try { await env.MEM.put("h:" + phone, JSON.stringify(hist.concat([{ role: "user", content: String(message).slice(0, 300) }, { role: "assistant", content: replyText.slice(0, 500) }]).slice(-6)), { expirationTtl: 3600 }); } catch (e) {} }
+  await memPut(env, String(phone), hist.concat([{ role: "user", content: String(message).slice(0, 600) }, { role: "assistant", content: replyText.slice(0, 900) }]));
   const hr = new Date(Date.now() + 5 * 3600e3).getUTCHours();
-  if (hr >= 23 || hr < 8) replyText += "\n\n🌙 Raat ka waqt hai, hamari team subah jawab degi.";
+  if ((hr >= 23 || hr < 8) && pkgIntent(message)) replyText += "\n\n🌙 Raat ka waqt hai, hamari team subah jawab degi.";
+  replyText = replyText.slice(0, 3800);
   if (env.LOG_URL && ctx && ctx.waitUntil) ctx.waitUntil(fetch(env.LOG_URL, { method: "POST", body: JSON.stringify({ time: new Date().toISOString(), phone, message, reply: replyText.slice(0, 300), mode: mode || "all" }) }).catch(() => {}));
   return new Response(JSON.stringify({ reply: replyText, replies: [{ message: replyText }] }), { headers: { "Content-Type": "application/json", ...CORS } });
 }
@@ -416,6 +416,25 @@ async function readToken(env, req) {
 const RANK = { administration: 3, admin: 2, agent: 1 };
 function normPhone(v) { let d = String(v || "").replace(/\D/g, ""); if (d.startsWith("92")) d = "0" + d.slice(2); if (d.length === 10 && d[0] === "3") d = "0" + d; return /^03\d{9}$/.test(d) ? d : null; }
 let DB_READY = false, SECRET_C = null;
+async function memGet(env, phone) {
+  if (phone === "guest" || !env.DB) return [];
+  try {
+    if (env.MEM) return JSON.parse((await env.MEM.get("h:" + phone)) || "[]");
+    await dbInit(env);
+    const r = await env.DB.prepare("SELECT data,updated FROM chatmem WHERE phone=?").bind(phone).first();
+    if (r && Date.now() - r.updated < 3600e3) return JSON.parse(r.data);
+  } catch (e) {}
+  return [];
+}
+async function memPut(env, phone, hist) {
+  if (phone === "guest" || !env.DB) return;
+  try {
+    const d = JSON.stringify(hist.slice(-6));
+    if (env.MEM) { await env.MEM.put("h:" + phone, d, { expirationTtl: 3600 }); return; }
+    await dbInit(env);
+    await env.DB.prepare("INSERT INTO chatmem(phone,data,updated) VALUES(?,?,?) ON CONFLICT(phone) DO UPDATE SET data=excluded.data, updated=excluded.updated").bind(phone, d, Date.now()).run();
+  } catch (e) {}
+}
 const SEED_SALT = "0ZhwNaCb_NhNpV3HtlTnGA", SEED_HASH = "dQMEGM6DyVkRRSWcnh08mJm_km308CzpzjP8zs9auvQ";
 async function getSecret(env) {
   if (env.AUTH_SECRET) return env.AUTH_SECRET;
@@ -433,6 +452,7 @@ async function dbInit(env) {
     env.DB.prepare("CREATE INDEX IF NOT EXISTS docs_parent ON docs(parent)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS vers (parent TEXT PRIMARY KEY, v INTEGER)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS settings (k TEXT PRIMARY KEY, v TEXT)"),
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS chatmem (phone TEXT PRIMARY KEY, data TEXT, updated INTEGER)"),
     env.DB.prepare("INSERT OR IGNORE INTO users(username,name,phone,role,salt,hash,suspended,created) VALUES('administration','Administration','','administration',?,?,0,?)").bind(SEED_SALT, SEED_HASH, new Date().toISOString())
   ]);
   try { await env.DB.prepare("ALTER TABLE posts ADD COLUMN office TEXT").run(); } catch (e) {}

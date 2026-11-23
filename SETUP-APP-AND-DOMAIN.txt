@@ -11,6 +11,8 @@ Website: https://alrazatravelhub.com        App / login: https://alrazatravelhub
    Cloudflare dashboard > Add a domain > alrazatravelhub.com (change nameservers), then
    Worker > Settings > Domains & Routes > Add > Custom domain: alrazatravelhub.com and www.alrazatravelhub.com.
 4) WHATSAPP (AutoResponder, both phones)  URL:  https://alrazatravelhub.com/api/bot
+   The AI now answers every question on both numbers and remembers the last messages for an hour.
+   To bring back "only Umrah questions, stay silent otherwise" add  ?mode=travel  to that phone's URL.
 
 Roles: Administration and Admin see everything, create agents, suspend, reset passwords. Agent sees only own leads, bookings and posts.
 Passwords are stored only as hashes: nobody can read them. Use Reset to give an agent a new password.
