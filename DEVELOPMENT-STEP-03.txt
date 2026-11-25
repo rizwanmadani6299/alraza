@@ -1,0 +1,32 @@
+AL RAZA TRAVEL — DEVELOPMENT STEP 03
+Admin Dashboard Integration & Legacy Booking Migration
+
+WHAT WAS ADDED
+- Admin-only "Migrate legacy bookings to D1" action in the existing Bookings screen.
+- Migration reads the existing legacy booking records already loaded in the admin panel and transfers them in batches of 40.
+- Existing legacy booking documents are never deleted or modified.
+- Migration is idempotent: a legacy record is assigned a stable legacy key; repeating migration skips records already imported.
+- Customer, booking, passenger, payment and refund history are transferred to the structured D1 tables.
+- Refund entries are preserved as type=Refund and are excluded from received-payment totals; balances use net payments.
+- Structured D1 records can be viewed from the Bookings screen by admin and agents (agents only see records allowed by the backend).
+- Migration actions are written to the travel audit log.
+
+DATABASE CHANGE
+- Added travel_bookings.legacy_id and a unique index to prevent duplicate imports.
+- Added booking_payments.type to distinguish Payment from Refund.
+- Worker dbInit applies additive changes automatically for existing Step 02 databases.
+- Manual SQL upgrade is provided at migrations/0003_legacy_booking_migration.sql; apply after migration 0002 when using manual migrations.
+
+IMPORTANT LIMITATIONS
+- This is a one-way import of legacy data into D1. The legacy booking interface remains the existing source of truth for creating/editing records in this step; it has not yet been switched to D1 writes.
+- Records without a valid Pakistani mobile number are skipped by the migration endpoint because the current customers table requires a validated phone number. Review these records manually before a future retry.
+- Legacy records remain untouched, and no source data is deleted.
+- D1 structured booking list is currently capped at 200 latest records in the panel view. A future pagination step is needed for larger datasets.
+- Payment records are historical entries only; they do not verify bank/JazzCash/Easypaisa receipt.
+- Passport and passenger data are sensitive. Test only with staging data, restrict access, and maintain backups.
+
+TESTING
+- Worker JavaScript syntax check: passed.
+- Inline app JavaScript syntax check: passed.
+- SQL migration 0002 + 0003: validated with SQLite syntax test.
+- Cloudflare staging deployment/API test: not performed.

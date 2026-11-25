@@ -1,0 +1,10 @@
+AL RAZA TRAVEL — DEVELOPMENT STEP 01
+Official business settings applied from owner confirmation (25 Nov 2026):
+- WhatsApp: +92 300 6299894 and +92 318 6299894 (both WhatsApp-enabled).
+- Call: +92 318 6299894.
+- Email: alrazatravelofficial@gmail.com
+- Office: DHA Branch, Shop No. 1, Building 3C, Lane 10, Khayaban-e-Sehar, Near Faizan Islam Masjid, Phase 7, DHA, Karachi, Pakistan.
+- Public travel partner: none (partner claims removed from the assistant and partner display).
+- Package price adjustment: PKR 10,000 (existing Cloudflare PRICE_ADD retained).
+
+IMPORTANT: This is a source-code update only. It has NOT been deployed. Before production deployment, test the public site, booking/WhatsApp links, Worker chat and package rates in a staging environment. Confirm that the package feed does not already include the PKR 10,000 adjustment, to avoid double-markup.

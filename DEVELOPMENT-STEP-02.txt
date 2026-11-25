@@ -1,0 +1,28 @@
+AL RAZA TRAVEL — DEVELOPMENT STEP 02
+Structured Booking & Payment Database Foundation
+
+WHAT WAS ADDED
+- D1 tables: customers, travel_bookings, booking_passengers, booking_payments, travel_audit_logs.
+- Indexes for customer phone, agent bookings, booking status/departure, passenger lookup, payment history and audit history.
+- Authenticated API endpoints:
+  GET  /api/travel/bookings?limit=100&status=Confirmed
+  POST /api/travel/bookings
+  PATCH /api/travel/bookings/{booking-id}
+  POST /api/travel/bookings/{booking-id}/payments
+  GET  /api/travel/audit (admin/administration only)
+- Agent users can only list and manage bookings assigned to their own username. Admin/administration can access all bookings.
+- Booking creation supports customer contact, package/departure details, passenger records and PKR total.
+- Payment records are append-only through this API; amount must be positive and may not exceed the outstanding booking balance.
+- Booking status and payment events are written to an audit log.
+
+IMPORTANT COMPATIBILITY
+- Existing app.html booking screens and legacy docs/bdocs data are not migrated or modified in this step.
+- This is a new structured backend foundation. The current app interface does not yet call these endpoints; UI integration and legacy-data migration are Step 03.
+- Tables are created automatically by dbInit on the first authenticated panel API request after deployment. A matching SQL migration is supplied in migrations/0002_travel_booking_core.sql for review/manual migration workflows.
+- No production deployment was performed. Test in a staging Worker/D1 database first.
+
+SECURITY / OPERATIONS NOTES
+- Endpoints require the existing Bearer login token.
+- Passport numbers and other passenger details are personal data. Limit access to authorized staff, use HTTPS, maintain backups, and define retention/deletion procedures before production use.
+- Payment endpoint records a payment entry only; it does not connect to a bank, JazzCash, Easypaisa or payment gateway and does not verify funds.
+- Do not enter actual customer/passport data into a test environment.

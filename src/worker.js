@@ -21,9 +21,8 @@ LANGUAGE: reply in the language the visitor writes in. Urdu script -> Urdu scrip
 
 ABOUT AL RAZA TRAVEL
 - Services: Hajj and Umrah (complete guidance), domestic and international air tickets, worldwide tour packages, visa processing, Makkah and Madinah hotels, transport, ziyarat.
-- CEO: Rizwan Madani. WhatsApp: 0300 6299894 (the WhatsApp Business number; always give this for WhatsApp). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alrazatravelhub.com/
+- CEO: Rizwan Madani. WhatsApp: 0300 6299894 and 0318 6299894 (both are WhatsApp numbers). Call: 0318 6299894. Email: alrazatravelofficial@gmail.com. Website: https://alrazatravelhub.com/
 - Address: DHA Branch: Shop No. 1, Building 3C, Lane 10, Khayaban-e-Sehar, Near Faizan Islam Masjid, Phase 7, DHA, Karachi, Pakistan. Facebook page: Al Raza Travel. Instagram: @alrazatravel.
-- Travel partner: Amere Taiba International (Muhammad Raees).
 - Partner airlines: PIA, Airblue, Serene Air, AirSial, Fly Jinnah, Saudia, flynas, flyadeal, Emirates, Qatar Airways, Etihad, Turkish Airlines.
 - Booking: reserve your seat first, then complete documents and advance payment to confirm. Payment methods: JazzCash, Easypaisa, online banking, cheque, pay order. Every payment is confirmed on WhatsApp with the team, who share account details there.
 - Cancellation: Al Raza charges no cancellation fee of its own, but the hotel and airline cancellation policies in force apply and must be followed. The team gives the exact terms for a specific booking.
@@ -53,7 +52,7 @@ const json = (o, status = 200) =>
 const SITE = `
 
 WEBSITE KNOWLEDGE (answer any question about this site and business):
-- Al Raza Travel, Karachi. WhatsApp 0300 6299894 (main), Call 0318 6299894. Travel partner: Shariq Ahmed Kashif. Social: Facebook, Instagram and TikTok @alrazatravel.
+- Al Raza Travel, Karachi. WhatsApp 0300 6299894 and 0318 6299894 (both are WhatsApp numbers); Call 0318 6299894. No travel partner is publicly listed. Social: Facebook, Instagram and TikTok @alrazatravel.
 - Site sections: Umrah packages (Karachi, Lahore, Islamabad, Multan, Sialkot, Peshawar) with every hotel, distance and rate per person; Reserve; Air tickets request; Group quote; Visa request; Makkah hotels list (30 hotels, walking distance, ask-rate); video of Makkah and Madinah; services (Hajj and Umrah, air tickets, worldwide tours, visa, flights, Makkah and Madinah hotels, transport, ziyarat, printed documents, group travel, custom Umrah package, 24/7 support); about; ziyarat places; process; reviews; payment; FAQ.
 - Free tools on the site (Umrah toolkit): package finder with PDF quote, live Makkah and Madinah time, weather and prayer times, PKR to SAR converter, checklist, tasbeeh, qibla, Umrah Mubarak card, hotel distance radar, Umrah step guide, dua library.
 - Payments: JazzCash, Easypaisa, online banking, cheque, pay order. Account details are given by the team on WhatsApp only.
@@ -136,7 +135,7 @@ const LETTER = { K: "Karachi", L: "Lahore", I: "Islamabad", M: "Multan", S: "Sia
 const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
 const MENU = "🕋 *AL RAZA TRAVEL — Main Menu*\n\n1️⃣ Karachi\n2️⃣ Lahore\n3️⃣ Islamabad\n4️⃣ Multan\n5️⃣ Sialkot\n6️⃣ Peshawar\n\n*1 se 6 likhein*\n(Sab packages: *packages* · Team se baat: *team*)\n\nYa apna sawal seedha likh dein, hum jawab denge. 🙂";
-const TEAM = "📞 *Al Raza Travel*\nWhatsApp: 0300 6299894\nCall: 0318 6299894\n\nMain menu: *menu*";
+const TEAM = "📞 *Al Raza Travel*\nWhatsApp: 0300 6299894 / 0318 6299894\nCall: 0318 6299894\n\nMain menu: *menu*";
 
 
 // ---------- Google Sheet (published CSV) -> packages ----------
@@ -453,9 +452,24 @@ async function dbInit(env) {
     env.DB.prepare("CREATE TABLE IF NOT EXISTS vers (parent TEXT PRIMARY KEY, v INTEGER)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS settings (k TEXT PRIMARY KEY, v TEXT)"),
     env.DB.prepare("CREATE TABLE IF NOT EXISTS chatmem (phone TEXT PRIMARY KEY, data TEXT, updated INTEGER)"),
+    // Structured travel operations tables (legacy docs remain untouched during migration).
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS customers (id TEXT PRIMARY KEY, name TEXT NOT NULL, phone TEXT NOT NULL, email TEXT, cnic TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`),
+    env.DB.prepare(`CREATE INDEX IF NOT EXISTS customers_phone_idx ON customers(phone)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS travel_bookings (id TEXT PRIMARY KEY, ref TEXT NOT NULL UNIQUE, legacy_id TEXT UNIQUE, customer_id TEXT NOT NULL REFERENCES customers(id), agent_username TEXT NOT NULL, package_id TEXT, package_name TEXT, departure_date TEXT, return_date TEXT, room_type TEXT, adults INTEGER NOT NULL DEFAULT 1, children INTEGER NOT NULL DEFAULT 0, infants INTEGER NOT NULL DEFAULT 0, total_pkr INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'Inquiry', notes TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS booking_payments (id TEXT PRIMARY KEY, booking_id TEXT NOT NULL REFERENCES travel_bookings(id), amount_pkr INTEGER NOT NULL CHECK(amount_pkr > 0), type TEXT NOT NULL DEFAULT 'Payment', method TEXT, reference TEXT, received_at TEXT NOT NULL, received_by TEXT NOT NULL, notes TEXT)`),
+    env.DB.prepare(`CREATE INDEX IF NOT EXISTS travel_bookings_agent_idx ON travel_bookings(agent_username, created_at)`),
+    env.DB.prepare(`CREATE INDEX IF NOT EXISTS travel_bookings_status_idx ON travel_bookings(status, departure_date)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS booking_passengers (id TEXT PRIMARY KEY, booking_id TEXT NOT NULL REFERENCES travel_bookings(id) ON DELETE CASCADE, full_name TEXT NOT NULL, gender TEXT, date_of_birth TEXT, passport_number TEXT, passport_expiry TEXT, created_at TEXT NOT NULL)`),
+    env.DB.prepare(`CREATE INDEX IF NOT EXISTS booking_passengers_booking_idx ON booking_passengers(booking_id)`),
+    env.DB.prepare(`CREATE INDEX IF NOT EXISTS booking_payments_booking_idx ON booking_payments(booking_id, received_at)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS travel_audit_logs (id TEXT PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, entity_type TEXT NOT NULL, entity_id TEXT NOT NULL, details TEXT, created_at TEXT NOT NULL)`),
+    env.DB.prepare(`CREATE INDEX IF NOT EXISTS travel_audit_entity_idx ON travel_audit_logs(entity_type, entity_id, created_at)`),
     env.DB.prepare("INSERT OR IGNORE INTO users(username,name,phone,role,salt,hash,suspended,created) VALUES('administration','Administration','','administration',?,?,0,?)").bind(SEED_SALT, SEED_HASH, new Date().toISOString())
   ]);
   try { await env.DB.prepare("ALTER TABLE posts ADD COLUMN office TEXT").run(); } catch (e) {}
+  try { await env.DB.prepare("ALTER TABLE travel_bookings ADD COLUMN legacy_id TEXT").run(); } catch (e) {}
+  try { await env.DB.prepare("CREATE UNIQUE INDEX IF NOT EXISTS travel_bookings_legacy_idx ON travel_bookings(legacy_id)").run(); } catch (e) {}
+  try { await env.DB.prepare("ALTER TABLE booking_payments ADD COLUMN type TEXT NOT NULL DEFAULT 'Payment'").run(); } catch (e) {}
   DB_READY = true;
 }
 function genPw() { const A = "abcdefghjkmnpqrstuvwxyz23456789"; return [...crypto.getRandomValues(new Uint8Array(8))].map(x => A[x % A.length]).join(""); }
@@ -504,6 +518,120 @@ async function panelApi(req, env, u) {
     const salt = crypto.getRandomValues(new Uint8Array(16));
     await env.DB.prepare("UPDATE users SET salt=?, hash=? WHERE username=?").bind(b64u(salt), await pbkdf(np, salt), me.username).run();
     return J({ ok: true });
+  }
+  // ---- Step 03: idempotent legacy booking migration (admin only) ----
+  if (P === "/api/travel/migrate-legacy" && M === "POST") {
+    if (RANK[me.role] < 2) return J({ error: "forbidden" }, 403);
+    const b = await body(), items = Array.isArray(b.bookings) ? b.bookings.slice(0, 40) : [];
+    if (!items.length) return J({ error: "empty_batch" }, 400);
+    const now = new Date().toISOString(); let imported = 0, skipped = 0, failed = 0;
+    for (const x of items) {
+      try {
+        const legacyId = String(x.legacyId || "").slice(0, 120);
+        const name = String(x.customerName || "").trim().slice(0,100), phone = normPhone(x.customerPhone || "");
+        if (!legacyId || !name || !phone) { failed++; continue; }
+        const exists = await env.DB.prepare("SELECT id FROM travel_bookings WHERE legacy_id=?").bind(legacyId).first();
+        if (exists) { skipped++; continue; }
+        const aid = String(x.agentUsername || "").trim().toLowerCase();
+        const agent = await env.DB.prepare("SELECT username FROM users WHERE username=? AND suspended=0").bind(aid).first();
+        const owner = String(env.ADMIN_USER || "administration").toLowerCase();
+        const agentUsername = agent ? aid : owner;
+        const customer = await env.DB.prepare("SELECT id FROM customers WHERE phone=? ORDER BY created_at LIMIT 1").bind(phone).first();
+        const cid = customer ? customer.id : crypto.randomUUID(), id = crypto.randomUUID();
+        const ref = "LEG-" + legacyId.replace(/[^a-z0-9]/gi, "").slice(-18).toUpperCase() + "-" + id.slice(0,6).toUpperCase();
+        const statusMap = { Booked:"Confirmed", Confirmed:"Confirmed", Completed:"Completed", Cancelled:"Cancelled", Inquiry:"Inquiry", Pending:"Pending", Ticketed:"Ticketed" };
+        const status = statusMap[String(x.status || "Booked")] || "Pending";
+        const pax = Array.isArray(x.passengers) ? x.passengers.slice(0,80) : [];
+        const pay = Array.isArray(x.payments) ? x.payments.slice(0,100) : [];
+        const stmts = [];
+        if (!customer) stmts.push(env.DB.prepare("INSERT INTO customers(id,name,phone,email,cnic,created_at,updated_at) VALUES(?,?,?,?,?,?,?)").bind(cid,name,phone,String(x.customerEmail||"").slice(0,120),"",now,now));
+        else stmts.push(env.DB.prepare("UPDATE customers SET name=?,updated_at=? WHERE id=?").bind(name,now,cid));
+        stmts.push(env.DB.prepare("INSERT INTO travel_bookings(id,ref,legacy_id,customer_id,agent_username,package_id,package_name,departure_date,return_date,room_type,adults,children,infants,total_pkr,status,notes,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(id,ref,legacyId,cid,agentUsername,String(x.packageId||"").slice(0,100),String(x.packageName||"").slice(0,160),String(x.departureDate||"").slice(0,10),String(x.returnDate||"").slice(0,10),String(x.roomType||"").slice(0,30),Math.max(1,Math.min(30,Number(x.adults)||1)),Math.max(0,Math.min(30,Number(x.children)||0)),Math.max(0,Math.min(20,Number(x.infants)||0)),Math.max(0,Math.round(Number(x.totalPkr)||0)),status,String(x.notes||"").slice(0,2000),String(x.createdAt||now).slice(0,40),now));
+        for (const p of pax) if (p && String(p.fullName||"").trim()) stmts.push(env.DB.prepare("INSERT INTO booking_passengers(id,booking_id,full_name,gender,date_of_birth,passport_number,passport_expiry,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(crypto.randomUUID(),id,String(p.fullName).trim().slice(0,100),String(p.gender||"").slice(0,20),String(p.dateOfBirth||"").slice(0,10),String(p.passportNumber||"").slice(0,30),String(p.passportExpiry||"").slice(0,10),now));
+        for (const p of pay) { const amount=Math.round(Number(p.amountPkr)||0); if(amount>0) stmts.push(env.DB.prepare("INSERT INTO booking_payments(id,booking_id,amount_pkr,type,method,reference,received_at,received_by,notes) VALUES(?,?,?,?,?,?,?,?,?)").bind(crypto.randomUUID(),id,amount,p.type==="Refund"?"Refund":"Payment",String(p.method||"").slice(0,40),String(p.reference||"").slice(0,100),String(p.receivedAt||now).slice(0,30),me.username,String(p.notes||"").slice(0,500))); }
+        stmts.push(env.DB.prepare("INSERT INTO travel_audit_logs(id,actor,action,entity_type,entity_id,details,created_at) VALUES(?,?,?,?,?,?,?)").bind(crypto.randomUUID(),me.username,"legacy.booking_migrated","booking",id,JSON.stringify({legacyId,ref}),now));
+        await env.DB.batch(stmts); imported++;
+      } catch (e) { failed++; }
+    }
+    return J({ ok:true, imported, skipped, failed, processed:items.length });
+  }
+  // ---- Structured travel booking API (Step 02) ----
+  if (P === "/api/travel/bookings" && M === "GET") {
+    const limit = Math.min(200, Math.max(1, Number(u.searchParams.get("limit")) || 100));
+    const status = u.searchParams.get("status") || "";
+    let q = "SELECT b.*, c.name AS customer_name, c.phone AS customer_phone, c.email AS customer_email FROM travel_bookings b JOIN customers c ON c.id=b.customer_id";
+    const args = [];
+    if (RANK[me.role] < 2) { q += " WHERE b.agent_username=?"; args.push(me.username); }
+    if (status) { q += (args.length ? " AND" : " WHERE") + " b.status=?"; args.push(status); }
+    q += " ORDER BY b.created_at DESC LIMIT ?"; args.push(limit);
+    const rows = await env.DB.prepare(q).bind(...args).all();
+    const bookings = rows.results || [];
+    for (const b of bookings) {
+      const [ps, pay] = await Promise.all([
+        env.DB.prepare("SELECT id,full_name,gender,date_of_birth,passport_number,passport_expiry FROM booking_passengers WHERE booking_id=? ORDER BY created_at").bind(b.id).all(),
+        env.DB.prepare("SELECT id,amount_pkr,type,method,reference,received_at,received_by,notes FROM booking_payments WHERE booking_id=? ORDER BY received_at").bind(b.id).all()
+      ]);
+      b.passengers = ps.results || []; b.payments = pay.results || [];
+      b.received_pkr = b.payments.filter(x => x.type !== "Refund").reduce((n, x) => n + Number(x.amount_pkr || 0), 0);
+      b.refunded_pkr = b.payments.filter(x => x.type === "Refund").reduce((n, x) => n + Number(x.amount_pkr || 0), 0);
+      b.balance_pkr = Math.max(0, Number(b.total_pkr || 0) - b.received_pkr);
+    }
+    return J({ bookings });
+  }
+  if (P === "/api/travel/bookings" && M === "POST") {
+    const b = await body(), name = String(b.customerName || "").trim().slice(0, 100), phone = normPhone(b.customerPhone);
+    const adults = Math.max(1, Math.min(30, Number(b.adults) || 1)), children = Math.max(0, Math.min(30, Number(b.children) || 0)), infants = Math.max(0, Math.min(20, Number(b.infants) || 0));
+    const total = Number(b.totalPkr);
+    const status = ["Inquiry", "Pending", "Confirmed"].includes(b.status) ? b.status : "Inquiry";
+    if (!name || !phone || !Number.isSafeInteger(total) || total < 0 || total > 100000000) return J({ error: "bad_fields" }, 400);
+    const passengers = Array.isArray(b.passengers) ? b.passengers.slice(0, 80) : [];
+    if (passengers.some(x => !x || !String(x.fullName || "").trim() || String(x.fullName).length > 100)) return J({ error: "bad_passengers" }, 400);
+    const now = new Date().toISOString(), id = crypto.randomUUID(), ref = "ART-" + now.slice(0,10).replace(/-/g,"") + "-" + crypto.randomUUID().slice(0,6).toUpperCase(), customerId = crypto.randomUUID();
+    const existing = await env.DB.prepare("SELECT id FROM customers WHERE phone=? ORDER BY created_at LIMIT 1").bind(phone).first();
+    const cid = existing ? existing.id : customerId;
+    const statements = [];
+    if (!existing) statements.push(env.DB.prepare("INSERT INTO customers(id,name,phone,email,cnic,created_at,updated_at) VALUES(?,?,?,?,?,?,?)").bind(cid,name,phone,String(b.customerEmail||"").slice(0,120),String(b.customerCnic||"").slice(0,30),now,now));
+    else statements.push(env.DB.prepare("UPDATE customers SET name=?,email=?,cnic=?,updated_at=? WHERE id=?").bind(name,String(b.customerEmail||"").slice(0,120),String(b.customerCnic||"").slice(0,30),now,cid));
+    statements.push(env.DB.prepare("INSERT INTO travel_bookings(id,ref,customer_id,agent_username,package_id,package_name,departure_date,return_date,room_type,adults,children,infants,total_pkr,status,notes,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(id,ref,cid,me.username,String(b.packageId||"").slice(0,100),String(b.packageName||"").slice(0,160),String(b.departureDate||"").slice(0,10),String(b.returnDate||"").slice(0,10),String(b.roomType||"").slice(0,30),adults,children,infants,total,status,String(b.notes||"").slice(0,2000),now,now));
+    for (const x of passengers) statements.push(env.DB.prepare("INSERT INTO booking_passengers(id,booking_id,full_name,gender,date_of_birth,passport_number,passport_expiry,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(crypto.randomUUID(),id,String(x.fullName).trim().slice(0,100),String(x.gender||"").slice(0,20),String(x.dateOfBirth||"").slice(0,10),String(x.passportNumber||"").slice(0,30),String(x.passportExpiry||"").slice(0,10),now));
+    statements.push(env.DB.prepare("INSERT INTO travel_audit_logs(id,actor,action,entity_type,entity_id,details,created_at) VALUES(?,?,?,?,?,?,?)").bind(crypto.randomUUID(),me.username,"booking.created","booking",id,JSON.stringify({ref,status,totalPkr:total}),now));
+    await env.DB.batch(statements);
+    return J({ ok: true, id, ref, status, createdAt: now }, 201);
+  }
+  const bookingMatch = P.match(/^\/api\/travel\/bookings\/([a-f0-9-]+)$/i);
+  if (bookingMatch && M === "PATCH") {
+    const id = bookingMatch[1], b = await body(), allowed = ["Inquiry", "Pending", "Confirmed", "Ticketed", "Completed", "Cancelled"];
+    if (!allowed.includes(b.status)) return J({ error: "bad_status" }, 400);
+    const rec = await env.DB.prepare("SELECT id,agent_username,status FROM travel_bookings WHERE id=?").bind(id).first();
+    if (!rec || (RANK[me.role] < 2 && rec.agent_username !== me.username)) return J({ error: "not_found" }, 404);
+    if (rec.status === "Cancelled" && b.status !== "Cancelled" && RANK[me.role] < 2) return J({ error: "admin_required" }, 403);
+    const now = new Date().toISOString();
+    await env.DB.batch([
+      env.DB.prepare("UPDATE travel_bookings SET status=?,updated_at=? WHERE id=?").bind(b.status,now,id),
+      env.DB.prepare("INSERT INTO travel_audit_logs(id,actor,action,entity_type,entity_id,details,created_at) VALUES(?,?,?,?,?,?,?)").bind(crypto.randomUUID(),me.username,"booking.status_changed","booking",id,JSON.stringify({from:rec.status,to:b.status}),now)
+    ]);
+    return J({ ok: true, status: b.status });
+  }
+  const paymentMatch = P.match(/^\/api\/travel\/bookings\/([a-f0-9-]+)\/payments$/i);
+  if (paymentMatch && M === "POST") {
+    const id = paymentMatch[1], b = await body(), amount = Number(b.amountPkr);
+    if (!Number.isSafeInteger(amount) || amount <= 0 || amount > 100000000) return J({ error: "bad_amount" }, 400);
+    const rec = await env.DB.prepare("SELECT id,agent_username,total_pkr,status FROM travel_bookings WHERE id=?").bind(id).first();
+    if (!rec || (RANK[me.role] < 2 && rec.agent_username !== me.username)) return J({ error: "not_found" }, 404);
+    if (rec.status === "Cancelled") return J({ error: "cancelled_booking" }, 409);
+    const sum = await env.DB.prepare("SELECT COALESCE(SUM(CASE WHEN type='Refund' THEN -amount_pkr ELSE amount_pkr END),0) AS n FROM booking_payments WHERE booking_id=?").bind(id).first();
+    if (Number(sum.n || 0) + amount > Number(rec.total_pkr)) return J({ error: "exceeds_balance" }, 409);
+    const now = new Date().toISOString(), pid = crypto.randomUUID();
+    await env.DB.batch([
+      env.DB.prepare("INSERT INTO booking_payments(id,booking_id,amount_pkr,method,reference,received_at,received_by,notes) VALUES(?,?,?,?,?,?,?,?)").bind(pid,id,amount,String(b.method||"").slice(0,40),String(b.reference||"").slice(0,100),String(b.receivedAt||now).slice(0,30),me.username,String(b.notes||"").slice(0,500)),
+      env.DB.prepare("INSERT INTO travel_audit_logs(id,actor,action,entity_type,entity_id,details,created_at) VALUES(?,?,?,?,?,?,?)").bind(crypto.randomUUID(),me.username,"payment.received","booking",id,JSON.stringify({paymentId:pid,amountPkr:amount}),now)
+    ]);
+    return J({ ok: true, paymentId: pid, amountPkr: amount }, 201);
+  }
+  if (P === "/api/travel/audit" && M === "GET") {
+    if (RANK[me.role] < 2) return J({ error: "forbidden" }, 403);
+    const rows = await env.DB.prepare("SELECT actor,action,entity_type,entity_id,details,created_at FROM travel_audit_logs ORDER BY created_at DESC LIMIT 200").all();
+    return J({ logs: rows.results || [] });
   }
   // ---- app database (Firestore-like) ----
   if (P === "/api/db" && M === "POST") {
@@ -626,7 +754,7 @@ export default {
     if (u.pathname === "/api/packages") {
       try { return await packagesApi(req, env); } catch (e) { return json([], 200); }
     }
-    if (u.pathname.startsWith("/api/auth/") || u.pathname === "/api/users" || u.pathname === "/api/users/password" || u.pathname === "/api/users/status" || u.pathname === "/api/db" || u.pathname === "/api/posts") {
+    if (u.pathname.startsWith("/api/auth/") || u.pathname === "/api/users" || u.pathname === "/api/users/password" || u.pathname === "/api/users/status" || u.pathname === "/api/db" || u.pathname === "/api/posts" || u.pathname.startsWith("/api/travel/")) {
       try { return await panelApi(req, env, u); } catch (e) { return json({ error: "server_error" }, 500); }
     }
     if (u.pathname === "/api/chat") {
